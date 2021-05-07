@@ -1,5 +1,10 @@
 package com.lamzone.mareu;
 
+import com.lamzone.mareu.di.DI;
+import com.lamzone.mareu.model.MeetingRoom;
+import com.lamzone.mareu.repository.DummyMeetingRoomRepository;
+import com.lamzone.mareu.repository.DummyMeetingRoomGenerator;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,39 +13,27 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class MeetingRoomRepositoryTest {
+public class DummyMeetingRoomRepositoryTest {
 
-    private MeetingRoomRepository repository;
+    private DummyMeetingRoomRepository repository;
 
     @Before
     public void setup() {
-        repository = DI.getTestInstanceRepository(); //Test repository with only 3 meeting rooms
+        repository = DI.getTestMeetingRoomRepository(); //Test repository with only 3 meeting rooms
     }
 
     @Test
     public void getMeetingRoomsWithSuccess() {
-        //Given : we want to get the list of meeting rooms
-        List<MeetingRoom> expectedMeetingRooms = DummyMeetingRoomsGenerator.TEST_MEETING_ROOMS;
-        //When : we retrieve the list
+        //Given : the expected list of meeting rooms
+        List<MeetingRoom> expectedMeetingRooms = DummyMeetingRoomGenerator.TEST_MEETING_ROOMS;
+        //When : retrieve the list of meeting rooms with method to test
         List<MeetingRoom> meetingRooms = repository.getMeetingRooms();
-        //Then : we get the expected list
+        //Then : retrieved list equals expected list
         assertEquals(expectedMeetingRooms, meetingRooms);
     }
 
     @Test
-    public void getIsFreeAtGivenSlotWithSuccess() {
-        //Given : a meeting slot and a specific meeting room
-        meetingTime = TEST_MEETING_TIME;
-        meetingDuration = TEST_MEETING_DURATION;
-        MeetingRoom meetingRoom = repository.getMeetingRooms().get(TEST_ROOM);
-        //When : get if meeting room is available at specific time
-        boolean isFree = meetingRoom.getIsFreeAtGivenTime(meetingTime, meetingDuration);
-        //Then : return is true
-        assertTrue(isFree);
-    }
-
-    @Test
-    public void getFreeMeetingRoomWithSuccess() {
+    public void getFreeMeetingRoomAtGivenSlotWithSuccess() {
         //Given : we need a free meeting room at a specific slot
         meetingTime = TEST_MEETING_TIME;
         meetingDuration = TEST_MEETING_DURATION;
