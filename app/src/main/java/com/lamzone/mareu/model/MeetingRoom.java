@@ -1,15 +1,16 @@
 package com.lamzone.mareu.model;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class MeetingRoom {
 
-    private String mMeetingRoomName;
-    private Drawable mMeetingRoomImage;
+    private final String mMeetingRoomName;
+    private final int mMeetingRoomImage;
     private ArrayList mMeetings;
 
+    public MeetingRoom(String meetingRoomName, int meetingRoomImage) {
+        mMeetingRoomName = meetingRoomName;
+        mMeetingRoomImage = meetingRoomImage;
+    }
 
 }

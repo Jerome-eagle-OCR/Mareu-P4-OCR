@@ -2,29 +2,26 @@ package com.lamzone.mareu.di;
 
 import com.lamzone.mareu.repository.DummyMeetingRoomRepository;
 import com.lamzone.mareu.repository.MeetingRoomRepository;
-import com.lamzone.mareu.repository.TestMeetingRoomRepository;
 
 public class DI {
 
     /**
      * Dependency injector to get instance of repository
      */
-    public static MeetingRoomRepository repository = new DummyMeetingRoomRepository();
+    public static MeetingRoomRepository repository = new DummyMeetingRoomRepository(false);
 
     /**
-     *
      * @return
      */
-    public MeetingRoomRepository getMeetingRoomRepository() {
+    public static MeetingRoomRepository getMeetingRoomRepository() {
         return repository;
     }
 
     /**
-     *
      * @return
      */
-    public MeetingRoomRepository getTestMeetingRoomRepository() {
-        return new DummyMeetingRoomRepository(3);
+    public static MeetingRoomRepository getTestMeetingRoomRepository() {
+        return new DummyMeetingRoomRepository(true);
     }
 
 }

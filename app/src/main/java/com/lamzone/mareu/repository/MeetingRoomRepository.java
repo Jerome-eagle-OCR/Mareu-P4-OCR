@@ -16,15 +16,15 @@ public interface MeetingRoomRepository {
      * Get first free meeting room in list at given time slot
      * @return
      */
-    MeetingRoom getFreeMeetingRoomAtGivenSlot(meetingTime, meetingDuration);
+    MeetingRoom getFreeMeetingRoomAtGivenSlot(long meetingStartTime, long meetingEndTime);
 
     /**
      * Schedule a meeting
      */
-    MeetingRoom scheduleMeeting(meetingTime, meetingDuration, subject, participants);
+    void scheduleMeeting(MeetingRoom meetingRoom, long meetingStartTime, long meetingEndTime, String meetingSubject, List<String> meetingParticipants);
 
     /**
      * Cancel a meeting
      */
-    void cancelMeeting(meetingRoom, meetingTime, meetingDuration);
+    void cancelMeeting(MeetingRoom meetingRoom, long meetingStartTime, long meetingEndTime);
 }

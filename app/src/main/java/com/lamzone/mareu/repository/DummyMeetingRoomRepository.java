@@ -9,14 +9,9 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     private final List<MeetingRoom> meetingRooms;
 
 
-    public DummyMeetingRoomRepository() {
-        meetingRooms = DummyMeetingRoomGenerator.generateMeetingRooms();
+    public DummyMeetingRoomRepository(boolean isTest) {
+        meetingRooms = isTest ? DummyMeetingRoomGenerator.generateMeetingRooms().subList(0, 3) : DummyMeetingRoomGenerator.generateMeetingRooms();
     }
-
-    public DummyMeetingRoomRepository(int nbMeetingRooms) {
-        meetingRooms = DummyMeetingRoomGenerator.generateMeetingRooms().subList(0, nbMeetingRooms + 1);
-    }
-
 
     @Override
     public List<MeetingRoom> getMeetingRooms() {
@@ -24,19 +19,18 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     }
 
     @Override
-    public MeetingRoom getFreeMeetingRoomAtGivenSlot(meetingTime, meetingDuration) {
-        //TODO
+    public MeetingRoom getFreeMeetingRoomAtGivenSlot(long meetingStartTime, long meetingEndTime) {
         return null;
     }
 
     @Override
-    public MeetingRoom scheduleMeeting(meetingTime, meetingDuration, subject, participants) {
-        //TODO
-        return null;
+    public void scheduleMeeting(MeetingRoom meetingRoom, long meetingStartTime, long meetingEndTime, String meetingSubject, List<String> meetingParticipants) {
+
     }
 
     @Override
-    public void cancelMeeting() {
+    public void cancelMeeting(MeetingRoom meetingRoom, long meetingStartTime, long meetingEndTime) {
 
     }
+
 }
