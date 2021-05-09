@@ -1,5 +1,6 @@
 package com.lamzone.mareu.repository;
 
+import com.lamzone.mareu.model.DateRange;
 import com.lamzone.mareu.model.Meeting;
 import com.lamzone.mareu.model.MeetingRoom;
 
@@ -33,4 +34,12 @@ public interface MeetingRoomRepository {
      * @param meeting     to cancel
      */
     void cancelMeeting(MeetingRoom meetingRoom, Meeting meeting);
+
+    /**
+     * Get every meetings occurring for given date range
+     *
+     * @param dateRangeEnum the given date range
+     * @return a list of meetings
+     */
+    List<Meeting> getMeetingsForGivenDateRange(Enum<DateRange> dateRangeEnum);
 }

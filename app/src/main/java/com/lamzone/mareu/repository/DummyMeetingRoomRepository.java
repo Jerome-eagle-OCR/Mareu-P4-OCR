@@ -1,5 +1,6 @@
 package com.lamzone.mareu.repository;
 
+import com.lamzone.mareu.model.DateRange;
 import com.lamzone.mareu.model.Meeting;
 import com.lamzone.mareu.model.MeetingRoom;
 
@@ -88,4 +89,9 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
         meetingRoom.deleteMeeting(meeting);
     }
 
+    @Override
+    public List<Meeting> getMeetingsForGivenDateRange(Enum<DateRange> dateRangeEnum) {
+        //TODO
+        return null;
+    }
 }

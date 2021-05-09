@@ -1,8 +1,10 @@
-package com.lamzone.mareu;
+package com.lamzone.mareu.ui.meetings_list;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.lamzone.mareu.R;
 
 public class MainActivity extends AppCompatActivity {
 

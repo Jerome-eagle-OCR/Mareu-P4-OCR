@@ -74,4 +74,12 @@ public class MeetingRoomRepositoryTest {
         repository.cancelMeeting(NEXT_TEST_MEETING_ROOM, unExpectedMeeting);
         assertFalse(NEXT_TEST_MEETING_ROOM.getMeetings().contains(unExpectedMeeting));
     }
+
+    @Test
+    public void getMeetingsForGivenDateRangeWithSuccess() {
+        //Given :
+        //When :
+        //Then :
+        //TODO
+    }
 }

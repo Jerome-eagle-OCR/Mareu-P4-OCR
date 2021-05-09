@@ -29,23 +29,16 @@ public class MeetingRoom {
 
     public void addMeeting(Meeting meeting) {
         boolean isNotAlreadyInList = true;
-        if (!this.getMeetings().isEmpty()) {
-            for (int i = 0; isNotAlreadyInList && i < this.getMeetings().size(); i++) {
-                if (this.getMeetings().get(i).equals(meeting)) {
-                    isNotAlreadyInList = false;
-                }
-            }
+        for (int i = 0; isNotAlreadyInList && i < mMeetings.size(); i++) {
+            if (mMeetings.get(i).equals(meeting)) isNotAlreadyInList = false;
+            i++;
         }
         if (isNotAlreadyInList) mMeetings.add(meeting);
     }
 
     public void deleteMeeting(Meeting meeting) {
-        if (!this.mMeetings.isEmpty()) {
-            for (int i = 0; i < this.getMeetings().size(); i++) {
-                if (this.mMeetings.get(i).equals(meeting)) {
-                    this.mMeetings.remove(i);
-                }
-            }
+        for (int i = 0; i < mMeetings.size(); i++) {
+            if (mMeetings.get(i).equals(meeting)) mMeetings.remove(i);
         }
     }
 }
