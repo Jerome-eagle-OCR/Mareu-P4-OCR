@@ -11,6 +11,7 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.timepicker.TimeFormat;
 import com.lamzone.mareu.R;
 
 import java.text.DateFormat;
@@ -22,6 +23,10 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private TextView mTextView;
     private Button mButton2;
     private TextView mTextView2;
+    private TextView mTextView3;
+
+    private long timeFromDatePicker;
+    private long combinationTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         mButton2 = findViewById(R.id.button2);
         mTextView2 = findViewById(R.id.textView2);
+
+        mTextView3 = findViewById(R.id.textView3);
 
         mButton.setOnClickListener(v -> {
             DialogFragment datePicker = new DatePickerFragment();
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        timeFromDatePicker = calendar.getTimeInMillis() - ((((calendar.get(Calendar.HOUR) + 12) * 60) + calendar.get(Calendar.MINUTE)) * 60000);
         String selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
         mTextView.setText(selectedDate);
     }
@@ -64,5 +72,8 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         calendar.set(Calendar.MINUTE, minute);
         String selectedTime = String.valueOf(minute).length() == 1 ? hourOfDay + " : 0" + minute : hourOfDay + " : " + minute;
         mTextView2.setText(selectedTime);
+        combinationTime = timeFromDatePicker + ((hourOfDay * 60 + minute) * 60000);
+        String finalTime = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(combinationTime);
+        mTextView3.setText(finalTime);
     }
 }
