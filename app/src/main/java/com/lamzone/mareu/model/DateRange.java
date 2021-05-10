@@ -2,5 +2,5 @@ package com.lamzone.mareu.model;
 
 public enum DateRange {
 
-    YYYY(), MM(), WW(), DD()
+    YEAR(), MONTH(), WEEK(), DAY()
 }

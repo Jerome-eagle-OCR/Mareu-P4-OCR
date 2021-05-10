@@ -77,9 +77,9 @@ public class MeetingRoomRepositoryTest {
 
     @Test
     public void getMeetingsForGivenDateRangeWithSuccess() {
-        //Given :
-        //When :
-        //Then :
+        //Given : we want to get all meetings for a given date range (year, month, week or day)
+        //When : we retrieve the meetings
+        //Then : we get the expected list of meetings
         //TODO
     }
 }
