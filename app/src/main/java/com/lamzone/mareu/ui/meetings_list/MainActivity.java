@@ -11,7 +11,6 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.timepicker.TimeFormat;
 import com.lamzone.mareu.R;
 
 import java.text.DateFormat;
@@ -32,6 +31,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+/**
+ getSupportActionBar().setDisplayShowHomeEnabled(true);
+ getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+ getSupportActionBar().setDisplayUseLogoEnabled(true);
+ getSupportActionBar().setTitle("    Gérer vos réunions");
+ **/
 
         mButton = findViewById(R.id.button);
         mTextView = findViewById(R.id.textView);

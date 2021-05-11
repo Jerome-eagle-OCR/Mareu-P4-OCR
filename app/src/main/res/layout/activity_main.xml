@@ -12,7 +12,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:text="combination" />
 
     <TextView
         android:id="@+id/textView"
@@ -42,13 +43,13 @@
         android:textSize="30sp" />
 
     <Button
-        android:text="open time picker"
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
-        android:layout_marginBottom="100dp" />
+        android:layout_marginBottom="100dp"
+        android:text="open time picker" />
 
 </RelativeLayout>

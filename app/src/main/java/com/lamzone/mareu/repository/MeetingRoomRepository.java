@@ -1,6 +1,5 @@
 package com.lamzone.mareu.repository;
 
-import com.lamzone.mareu.model.DateRange;
 import com.lamzone.mareu.model.Meeting;
 import com.lamzone.mareu.model.MeetingRoom;
 
@@ -16,30 +15,61 @@ public interface MeetingRoomRepository {
     List<MeetingRoom> getMeetingRooms();
 
     /**
-     * Get first free meeting room in list at given time slot
+     * Get meeting room from its id
      *
-     * @return a meeting room where a meeting can be scheduled at tested time slot
+     * @param id of meeting room
+     * @return the meeting room
      */
-    MeetingRoom getFreeMeetingRoomAtGivenSlot(long meetingStartTime, long meetingEndTime);
+    MeetingRoom getMeetingRoomById(long id);
+
+    /**
+     * Get meetings
+     *
+     * @return the full list of meetings
+     */
+    List<Meeting> getMeetings();
+
+    /**
+     * Get all meetings taking place in given meeting room
+     *
+     * @param meetingRoomId the given meeting room id
+     * @return a list of meetings
+     */
+    List<Meeting> getMeetingsForGivenMeetingRoom(long meetingRoomId);
+
+    /**
+     * Check meeting rooms one by one in list to get first one available at given slot
+     *
+     * @param newMeetingStartTime Start time of new meeting to schedule
+     * @param newMeetingEndTime   End time of new meeting to schedule
+     * @return Available meeting rooms, empty list if none
+     */
+    List<MeetingRoom> getFreeMeetingRoomsAtGivenSlot(long newMeetingStartTime, long newMeetingEndTime);
 
     /**
      * Schedule a meeting
+     *
+     * @param idMeetingRoom       The id of meeting room where meeting will take place
+     * @param meetingSubject      The subject of this meeting
+     * @param meetingDay          The day of the meeting
+     * @param meetingStartTime    The meeting start time
+     * @param meetingEndTime      The meeting end time
+     * @param meetingParticipants The list of participants
      */
-    void scheduleMeeting(MeetingRoom meetingRoom, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants);
+    void scheduleMeeting(long idMeetingRoom, String meetingSubject, String meetingDay, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants);
 
     /**
      * Cancel a meeting
      *
-     * @param meetingRoom where meeting take place
-     * @param meeting     to cancel
+     * @param meeting to cancel
      */
-    void cancelMeeting(MeetingRoom meetingRoom, Meeting meeting);
+    void cancelMeeting(Meeting meeting);
 
     /**
-     * Get every meetings occurring for given date range
+     * Get all meetings occurring on a specific day
      *
-     * @param dateRangeEnum the given date range
+     * @param day the specific day
      * @return a list of meetings
      */
-    List<Meeting> getMeetingsForGivenDateRange(Enum<DateRange> dateRangeEnum);
+    List<Meeting> getMeetingsForGivenDay(String day);
 }

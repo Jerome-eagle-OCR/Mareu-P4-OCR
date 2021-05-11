@@ -1,18 +1,19 @@
 package com.lamzone.mareu.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MeetingRoom {
 
+    private long id;
     private final String mMeetingRoomName;
     private final int mMeetingRoomImage;
-    private List<Meeting> mMeetings;
 
-    public MeetingRoom(String meetingRoomName, int meetingRoomImage) {
+    public MeetingRoom(long id, String meetingRoomName, int meetingRoomImage) {
+        this.id = id;
         mMeetingRoomName = meetingRoomName;
         mMeetingRoomImage = meetingRoomImage;
-        mMeetings = new ArrayList<>();
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getMeetingRoomName() {
@@ -21,24 +22,5 @@ public class MeetingRoom {
 
     public int getMeetingRoomImage() {
         return mMeetingRoomImage;
-    }
-
-    public List<Meeting> getMeetings() {
-        return mMeetings;
-    }
-
-    public void addMeeting(Meeting meeting) {
-        boolean isNotAlreadyInList = true;
-        for (int i = 0; isNotAlreadyInList && i < mMeetings.size(); i++) {
-            if (mMeetings.get(i).equals(meeting)) isNotAlreadyInList = false;
-            i++;
-        }
-        if (isNotAlreadyInList) mMeetings.add(meeting);
-    }
-
-    public void deleteMeeting(Meeting meeting) {
-        for (int i = 0; i < mMeetings.size(); i++) {
-            if (mMeetings.get(i).equals(meeting)) mMeetings.remove(i);
-        }
     }
 }
