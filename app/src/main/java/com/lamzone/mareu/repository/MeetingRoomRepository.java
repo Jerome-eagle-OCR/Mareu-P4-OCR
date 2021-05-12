@@ -59,6 +59,13 @@ public interface MeetingRoomRepository {
     void scheduleMeeting(long idMeetingRoom, String meetingSubject, String meetingDay, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants);
 
     /**
+     * Schedule a meeting
+     *
+     * @param meeting The meeting to schedule
+     */
+    void scheduleMeeting(Meeting meeting);
+
+    /**
      * Cancel a meeting
      *
      * @param meeting to cancel

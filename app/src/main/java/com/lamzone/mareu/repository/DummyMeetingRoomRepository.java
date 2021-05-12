@@ -128,6 +128,22 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     }
 
     /**
+     * Schedule a meeting
+     *
+     * @param meeting The meeting to schedule
+     */
+    @Override
+    public void scheduleMeeting(Meeting meeting) {
+        long idMeetingRoom = meeting.getMeetingRoomId();
+        String meetingSubject = meeting.getMeetingSubject();
+        String meetingDay = meeting.getMeetingDay();
+        long meetingStartTime = meeting.getMeetingStartTime();
+        long meetingEndTime = meeting.getMeetingEndTime();
+        List<String> meetingParticipants = meeting.getMeetingParticipants();
+        this.scheduleMeeting(idMeetingRoom, meetingSubject, meetingDay, meetingStartTime, meetingEndTime, meetingParticipants);
+    }
+
+    /**
      * Cancel a meeting
      *
      * @param meeting to cancel
@@ -147,7 +163,12 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
      */
     @Override
     public List<Meeting> getMeetingsForGivenDay(String day) {
-        //TODO
-        return null;
+        List<Meeting> meetings = new ArrayList<>();
+        for (int i = 0; i < mMeetings.size(); i++) {
+            if (mMeetings.get(i).getMeetingDay().equals(day)) {
+                meetings.add(mMeetings.get(i));
+            }
+        }
+        return meetings;
     }
 }
