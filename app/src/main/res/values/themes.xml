@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.Maréu" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#CE868A</item>
-        <item name="colorPrimaryVariant">#B36269</item>
+        <item name="colorPrimary">@color/lamzoneLight</item>
+        <item name="colorPrimaryVariant">@color/lamzoneDark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#BFBFBF</item>
-        <item name="colorSecondaryVariant">#4A4A4A</item>
+        <item name="colorSecondaryVariant">@color/lamzoneDarker</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>

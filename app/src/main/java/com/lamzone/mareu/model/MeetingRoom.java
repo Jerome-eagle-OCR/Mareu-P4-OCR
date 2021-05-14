@@ -4,12 +4,12 @@ public class MeetingRoom {
 
     private long id;
     private final String mMeetingRoomName;
-    private final int mMeetingRoomImage;
+    private final int mMeetingRoomSymbol;
 
-    public MeetingRoom(long id, String meetingRoomName, int meetingRoomImage) {
+    public MeetingRoom(long id, String meetingRoomName, int meetingRoomSymbol) {
         this.id = id;
         mMeetingRoomName = meetingRoomName;
-        mMeetingRoomImage = meetingRoomImage;
+        mMeetingRoomSymbol = meetingRoomSymbol;
     }
 
     public long getId() {
@@ -20,7 +20,7 @@ public class MeetingRoom {
         return mMeetingRoomName;
     }
 
-    public int getMeetingRoomImage() {
-        return mMeetingRoomImage;
+    public int getMeetingRoomSymbol() {
+        return mMeetingRoomSymbol;
     }
 }

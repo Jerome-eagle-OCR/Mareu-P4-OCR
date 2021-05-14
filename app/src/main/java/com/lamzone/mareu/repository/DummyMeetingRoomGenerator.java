@@ -10,16 +10,16 @@ import java.util.List;
 public abstract class DummyMeetingRoomGenerator {
 
     public static final List<MeetingRoom> DUMMY_MEETING_ROOMS = Arrays.asList(
-            new MeetingRoom(1, "Bouleau... à abattre", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(2, "Cyprès... du but", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(3, "Chêne... de valeur", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(4, "Saule... ou à plusieurs", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(5, "Hêtre... toujours positif", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(6, "Peuplier... mais ne rompt pas", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(7, "Mélèze... pas tomber", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(8, "Thuya... rivera", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(9, "If... watch your switchCase", R.drawable.dflt_meeting_room_image),
-            new MeetingRoom(10, "Epicéa... ton tour", R.drawable.dflt_meeting_room_image)
+            new MeetingRoom(1, "Sun", R.drawable.sun),
+            new MeetingRoom(2, "Mercury", R.drawable.mercury),
+            new MeetingRoom(3, "Venus", R.drawable.venus),
+            new MeetingRoom(4, "Earth", R.drawable.earth),
+            new MeetingRoom(5, "Moon", R.drawable.moon),
+            new MeetingRoom(6, "Mars", R.drawable.mars),
+            new MeetingRoom(7, "Jupiter", R.drawable.jupiter),
+            new MeetingRoom(8, "Saturn", R.drawable.saturn),
+            new MeetingRoom(9, "Uranus", R.drawable.uranus),
+            new MeetingRoom(10, "Neptune", R.drawable.neptune)
     );
 
 

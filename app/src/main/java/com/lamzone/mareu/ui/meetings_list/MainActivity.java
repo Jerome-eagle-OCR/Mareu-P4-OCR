@@ -1,84 +1,65 @@
 package com.lamzone.mareu.ui.meetings_list;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lamzone.mareu.R;
+import com.lamzone.mareu.di.DI;
+import com.lamzone.mareu.model.Meeting;
+import com.lamzone.mareu.model.MeetingRoom;
+import com.lamzone.mareu.repository.MeetingRoomRepository;
+import com.lamzone.mareu.utils.Utils;
 
-import java.text.DateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class MainActivity extends AppCompatActivity {
 
-    private Button mButton;
-    private TextView mTextView;
-    private Button mButton2;
-    private TextView mTextView2;
-    private TextView mTextView3;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    private long timeFromDatePicker;
-    private long combinationTime;
+    private FloatingActionButton mCreateMeetingButton;
+
+    private MeetingRoomRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/**
- getSupportActionBar().setDisplayShowHomeEnabled(true);
- getSupportActionBar().setLogo(R.mipmap.ic_launcher);
- getSupportActionBar().setDisplayUseLogoEnabled(true);
- getSupportActionBar().setTitle("    Gérer vos réunions");
- **/
 
-        mButton = findViewById(R.id.button);
-        mTextView = findViewById(R.id.textView);
+        repository = DI.getMeetingRoomRepository();
 
-        mButton2 = findViewById(R.id.button2);
-        mTextView2 = findViewById(R.id.textView2);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle("    Gérer vos réunions");
 
-        mTextView3 = findViewById(R.id.textView3);
+        ArrayList<MeetingFragment> meetingFragments = new ArrayList<>();
+        for (int i = 0; i < Utils.TEST_MEETINGS.size(); i++) {
+            repository.scheduleMeeting(Utils.TEST_MEETINGS.get(i));
+        }
+        for (int i = 0; i < repository.getMeetings().size(); i++) {
+            Meeting currentMeeting = repository.getMeetings().get(i);
+            MeetingRoom currentMeetingRoom = repository.getMeetingRoomById(currentMeeting.getMeetingRoomId());
+            meetingFragments.add(new MeetingFragment(currentMeetingRoom.getMeetingRoomName(), currentMeetingRoom.getMeetingRoomSymbol(),
+                    currentMeeting.getMeetingSubject(), currentMeeting.getMeetingParticipants().toString(), currentMeeting.getMeetingDay()));
+        }
 
-        mButton.setOnClickListener(v -> {
-            DialogFragment datePicker = new DatePickerFragment();
-            datePicker.show(getSupportFragmentManager(), "date picker");
-        });
+        mRecyclerView = findViewById(R.id.meeting_list);
+        mRecyclerView.hasFixedSize();
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new MeetingRecyclerViewAdapter(meetingFragments);
 
-        mButton2.setOnClickListener(v -> {
-            DialogFragment timePicker = new TimePickerFragment();
-            timePicker.show(getSupportFragmentManager(), "time picker");
-        });
-    }
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        timeFromDatePicker = calendar.getTimeInMillis() - ((((calendar.get(Calendar.HOUR) + 12) * 60) + calendar.get(Calendar.MINUTE)) * 60000);
-        String selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(calendar.getTime());
-        mTextView.setText(selectedDate);
-    }
-
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        calendar.set(Calendar.MINUTE, minute);
-        String selectedTime = String.valueOf(minute).length() == 1 ? hourOfDay + " : 0" + minute : hourOfDay + " : " + minute;
-        mTextView2.setText(selectedTime);
-        combinationTime = timeFromDatePicker + ((hourOfDay * 60 + minute) * 60000);
-        String finalTime = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(combinationTime);
-        mTextView3.setText(finalTime);
+        mCreateMeetingButton = findViewById(R.id.create_meeting);
+        mCreateMeetingButton.setOnClickListener(v -> Toast.makeText(v.getContext(), "To be implemented !", Toast.LENGTH_LONG).show());
     }
 }
