@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.meetings_list.MainActivity">
+    tools:context=".ui.meetings_list.MeetingsListActivity">
 
     <TextView
         android:id="@+id/textView3"
