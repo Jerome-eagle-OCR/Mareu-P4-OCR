@@ -7,12 +7,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.Maréu">
-        <activity android:name=".ui.meetings_list.NewMeetingActivity"
+        <activity
+            android:name=".ui.meetings_list.NewMeetingActivity"
             android:parentActivityName=".ui.meetings_list.MeetingsListActivity"
-            android:theme="@style/Theme.Maréu.NoActionBar"
-            />
+            android:theme="@style/Theme.Maréu.NoActionBar" />
         <activity android:name=".ui.meetings_list.MeetingsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

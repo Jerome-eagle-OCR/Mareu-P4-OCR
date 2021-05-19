@@ -2,7 +2,7 @@ package com.lamzone.mareu.model;
 
 public class MeetingRoom {
 
-    private long id;
+    private final long id;
     private final String mMeetingRoomName;
     private final int mMeetingRoomSymbol;
 

@@ -1,6 +1,6 @@
 package com.lamzone.mareu.ui.meetings_list;
 
-public class MeetingFragment {
+public class MeetingItem {
 
     private String mMeetingRoomName;
     private int mMeetingRoomSymbol;
@@ -8,7 +8,7 @@ public class MeetingFragment {
     private String mMeetingParticipants;
     private String mMeetingDate;
 
-    public MeetingFragment(String meetingRoomName, int meetingRoomSymbol, String meetingSubject, String meetingParticipants, String meetingDate) {
+    public MeetingItem(String meetingRoomName, int meetingRoomSymbol, String meetingSubject, String meetingParticipants, String meetingDate) {
         mMeetingRoomName = meetingRoomName;
         mMeetingRoomSymbol = meetingRoomSymbol;
         mMeetingSubject = meetingSubject;

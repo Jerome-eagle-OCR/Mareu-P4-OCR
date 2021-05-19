@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/lamzoneDarker"
         android:scrollbars="vertical"
-        tools:listitem="@layout/meeting_fragment" />
+        tools:listitem="@layout/meeting_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_meeting"

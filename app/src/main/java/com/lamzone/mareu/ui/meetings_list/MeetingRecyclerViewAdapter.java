@@ -21,9 +21,9 @@ import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.MeetingViewHolder> {
 
-    private final ArrayList<MeetingFragment> mMeetings;
+    private final ArrayList<MeetingItem> mMeetings;
 
-    public MeetingRecyclerViewAdapter(ArrayList<MeetingFragment> items) {
+    public MeetingRecyclerViewAdapter(ArrayList<MeetingItem> items) {
         mMeetings = items;
     }
 
@@ -53,19 +53,19 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
     @NotNull
     @Override
     public MeetingViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.meeting_fragment, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.meeting_item, parent, false);
         return new MeetingViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MeetingRecyclerViewAdapter.MeetingViewHolder holder, int position) {
-        MeetingFragment currentMeetingFragment = mMeetings.get(position);
+        MeetingItem currentMeetingItem = mMeetings.get(position);
 
-        holder.mMeetingRoomName.setText(currentMeetingFragment.getMeetingRoomName());
-        holder.mMeetingRoomSymbol.setImageDrawable(getDrawable(holder.mMeetingRoomSymbol.getContext(), currentMeetingFragment.getMeetingRoomSymbol()));
-        holder.mMeetingSubject.setText(currentMeetingFragment.getMeetingSubject());
-        holder.mMeetingParticipants.setText(currentMeetingFragment.getMeetingParticipants());
-        holder.mMeetingDate.setText(currentMeetingFragment.getMeetingDate());
+        holder.mMeetingRoomName.setText(currentMeetingItem.getMeetingRoomName());
+        holder.mMeetingRoomSymbol.setImageDrawable(getDrawable(holder.mMeetingRoomSymbol.getContext(), currentMeetingItem.getMeetingRoomSymbol()));
+        holder.mMeetingSubject.setText(currentMeetingItem.getMeetingSubject());
+        holder.mMeetingParticipants.setText(currentMeetingItem.getMeetingParticipants());
+        holder.mMeetingDate.setText(currentMeetingItem.getMeetingDate());
 
         holder.mMeetingDelete.setOnClickListener(v -> Toast.makeText(v.getContext(), "To be implemented !", Toast.LENGTH_LONG).show());
     }

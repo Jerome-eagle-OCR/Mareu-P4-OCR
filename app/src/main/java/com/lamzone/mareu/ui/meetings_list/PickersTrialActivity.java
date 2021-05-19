@@ -16,7 +16,7 @@ import com.lamzone.mareu.R;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class PickersActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class PickersTrialActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private Button mButton;
     private TextView mTextView;
@@ -31,7 +31,7 @@ public class PickersActivity extends AppCompatActivity implements DatePickerDial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pickers_testing);
+        setContentView(R.layout.pickers_trial);
 
         scrollingText = findViewById(R.id.textView3);
         scrollingText.setSelected(true);
