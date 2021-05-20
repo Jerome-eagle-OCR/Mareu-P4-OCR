@@ -2,12 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/date_filtering"
         android:title="Filtrer par date"
         app:showAsAction="never" />
     <item
+        android:id="@+id/meeting_room_filtering"
         android:title="Filtrer par salle"
         app:showAsAction="never" />
     <item
+        android:id="@+id/reinitialize_list"
         android:title="Réinitialiser la liste"
         app:showAsAction="never" />
 </menu>

@@ -3,8 +3,9 @@ package com.lamzone.mareu.ui.meetings_list;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,11 +31,6 @@ public class MeetingsListActivity extends AppCompatActivity {
 
     private MeetingRoomRepository repository;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.meeting_list_menu, menu);
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +65,30 @@ public class MeetingsListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         mCreateMeetingButton = findViewById(R.id.create_meeting);
-        mCreateMeetingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newMeetingActivityIntent = new Intent(MeetingsListActivity.this, NewMeetingActivity.class);
-                startActivity(newMeetingActivityIntent);
-            }
+        mCreateMeetingButton.setOnClickListener(v -> {
+            Intent newMeetingActivityIntent = new Intent(MeetingsListActivity.this, NewMeetingActivity.class);
+            startActivity(newMeetingActivityIntent);
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.meeting_list_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.date_filtering:
+                //TODO : add DatePicker and update getMeetingsForGivenDay
+                //repository.getMeetingsForGivenDay(date);
+            case R.id.meeting_room_filtering:
+                //TODO : add MeetingRoomGrid Dialog to pick a meeting room
+            case R.id.reinitialize_list:
+                //TODO
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

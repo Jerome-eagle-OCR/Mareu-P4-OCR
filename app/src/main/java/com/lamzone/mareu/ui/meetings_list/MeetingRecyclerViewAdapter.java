@@ -21,6 +21,7 @@ import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.MeetingViewHolder> {
 
+    //TODO : use repository meetings list
     private final ArrayList<MeetingItem> mMeetings;
 
     public MeetingRecyclerViewAdapter(ArrayList<MeetingItem> items) {
@@ -67,7 +68,12 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
         holder.mMeetingParticipants.setText(currentMeetingItem.getMeetingParticipants());
         holder.mMeetingDate.setText(currentMeetingItem.getMeetingDate());
 
-        holder.mMeetingDelete.setOnClickListener(v -> Toast.makeText(v.getContext(), "To be implemented !", Toast.LENGTH_LONG).show());
+        holder.mMeetingDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "To be implemented !", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
