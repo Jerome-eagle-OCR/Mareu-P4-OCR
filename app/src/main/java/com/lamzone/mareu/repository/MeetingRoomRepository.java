@@ -51,12 +51,11 @@ public interface MeetingRoomRepository {
      *
      * @param idMeetingRoom       The id of meeting room where meeting will take place
      * @param meetingSubject      The subject of this meeting
-     * @param meetingDay          The day of the meeting
      * @param meetingStartTime    The meeting start time
      * @param meetingEndTime      The meeting end time
      * @param meetingParticipants The list of participants
      */
-    void scheduleMeeting(long idMeetingRoom, String meetingSubject, String meetingDay, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants);
+    void scheduleMeeting(long idMeetingRoom, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants);
 
     /**
      * Schedule a meeting
@@ -75,8 +74,8 @@ public interface MeetingRoomRepository {
     /**
      * Get all meetings occurring on a specific day
      *
-     * @param day the specific day
+     * @param dayTimeStamp the specific day timeStamp in ms
      * @return a list of meetings
      */
-    List<Meeting> getMeetingsForGivenDay(String day);
+    List<Meeting> getMeetingsForGivenDate(long dayTimeStamp);
 }

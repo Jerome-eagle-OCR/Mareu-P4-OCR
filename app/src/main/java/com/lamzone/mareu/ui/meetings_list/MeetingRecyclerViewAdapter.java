@@ -12,19 +12,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lamzone.mareu.R;
+import com.lamzone.mareu.di.DI;
+import com.lamzone.mareu.model.Meeting;
+import com.lamzone.mareu.model.MeetingRoom;
+import com.lamzone.mareu.repository.MeetingRoomRepository;
+import com.lamzone.mareu.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.MeetingViewHolder> {
 
-    //TODO : use repository meetings list
-    private final ArrayList<MeetingItem> mMeetings;
+    private List<Meeting> mMeetings;
 
-    public MeetingRecyclerViewAdapter(ArrayList<MeetingItem> items) {
+    private MeetingRoomRepository repository = DI.getMeetingRoomRepository();
+
+    public MeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
     }
 
@@ -60,13 +66,13 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MeetingRecyclerViewAdapter.MeetingViewHolder holder, int position) {
-        MeetingItem currentMeetingItem = mMeetings.get(position);
-
-        holder.mMeetingRoomName.setText(currentMeetingItem.getMeetingRoomName());
-        holder.mMeetingRoomSymbol.setImageDrawable(getDrawable(holder.mMeetingRoomSymbol.getContext(), currentMeetingItem.getMeetingRoomSymbol()));
-        holder.mMeetingSubject.setText(currentMeetingItem.getMeetingSubject());
-        holder.mMeetingParticipants.setText(currentMeetingItem.getMeetingParticipants());
-        holder.mMeetingDate.setText(currentMeetingItem.getMeetingDate());
+        Meeting currentMeeting = mMeetings.get(position);
+        MeetingRoom currentMeetingRoom = repository.getMeetingRoomById(currentMeeting.getMeetingRoomId());
+        holder.mMeetingRoomName.setText(currentMeetingRoom.getMeetingRoomName());
+        holder.mMeetingRoomSymbol.setImageDrawable(getDrawable(holder.mMeetingRoomName.getContext(), currentMeetingRoom.getMeetingRoomSymbol()));
+        holder.mMeetingSubject.setText(currentMeeting.getMeetingSubject());
+        holder.mMeetingParticipants.setText(currentMeeting.getMeetingParticipants().toString());
+        holder.mMeetingDate.setText(Utils.formatDate(currentMeeting.getMeetingStartTime()));
 
         holder.mMeetingDelete.setOnClickListener(new View.OnClickListener() {
             @Override

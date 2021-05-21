@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lamzone.mareu.R;
 import com.lamzone.mareu.di.DI;
 import com.lamzone.mareu.model.Meeting;
-import com.lamzone.mareu.model.MeetingRoom;
 import com.lamzone.mareu.repository.MeetingRoomRepository;
 import com.lamzone.mareu.utils.Utils;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class MeetingsListActivity extends AppCompatActivity {
@@ -27,7 +28,7 @@ public class MeetingsListActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private FloatingActionButton mCreateMeetingButton;
+    private FloatingActionButton mNewMeetingButton;
 
     private MeetingRoomRepository repository;
 
@@ -44,30 +45,31 @@ public class MeetingsListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setTitle("    GERER VOS REUNIONS");
 
-
-        ArrayList<MeetingItem> meetingItems = new ArrayList<>();
-        for (int i = 0; i < Utils.TEST_MEETINGS.size(); i++) {
-            repository.scheduleMeeting(Utils.TEST_MEETINGS.get(i));
+        for (int i = 0; i < Utils.DUMMY_MEETINGS.size(); i++) {
+            repository.scheduleMeeting(Utils.DUMMY_MEETINGS.get(i));
         }
-        for (int i = 0; i < repository.getMeetings().size(); i++) {
-            Meeting currentMeeting = repository.getMeetings().get(i);
-            MeetingRoom currentMeetingRoom = repository.getMeetingRoomById(currentMeeting.getMeetingRoomId());
-            meetingItems.add(new MeetingItem(currentMeetingRoom.getMeetingRoomName(), currentMeetingRoom.getMeetingRoomSymbol(),
-                    currentMeeting.getMeetingSubject(), currentMeeting.getMeetingParticipants().toString(), currentMeeting.getMeetingDay()));
-        }
+        List<Meeting> meetingList = repository.getMeetings();
+        Collections.sort(meetingList, new Utils.SortByStartTime());
 
         mRecyclerView = findViewById(R.id.meeting_list);
         mRecyclerView.hasFixedSize();
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new MeetingRecyclerViewAdapter(meetingItems);
+        mAdapter = new MeetingRecyclerViewAdapter(meetingList);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        mCreateMeetingButton = findViewById(R.id.create_meeting);
-        mCreateMeetingButton.setOnClickListener(v -> {
+        mNewMeetingButton = findViewById(R.id.create_meeting);
+        mNewMeetingButton.setOnClickListener(v -> {
             Intent newMeetingActivityIntent = new Intent(MeetingsListActivity.this, NewMeetingActivity.class);
             startActivity(newMeetingActivityIntent);
+        });
+        mNewMeetingButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mNewMeetingButton.setAlpha(mNewMeetingButton.getAlpha() == 1 ? (float) 0.2 : (float) 1);
+                return true;
+            }
         });
     }
 

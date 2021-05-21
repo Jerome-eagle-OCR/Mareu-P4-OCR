@@ -2,6 +2,7 @@ package com.lamzone.mareu.repository;
 
 import com.lamzone.mareu.model.Meeting;
 import com.lamzone.mareu.model.MeetingRoom;
+import com.lamzone.mareu.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,14 +117,13 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
      *
      * @param idMeetingRoom       The id of meeting room where meeting will take place
      * @param meetingSubject      The subject of this meeting
-     * @param meetingDay          The day of the meeting
      * @param meetingStartTime    The meeting start time
      * @param meetingEndTime      The meeting end time
      * @param meetingParticipants The list of participants
      */
     @Override
-    public void scheduleMeeting(long idMeetingRoom, String meetingSubject, String meetingDay, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
-        Meeting newMeeting = new Meeting(idMeetingRoom, meetingSubject, meetingDay, meetingStartTime, meetingEndTime, meetingParticipants);
+    public void scheduleMeeting(long idMeetingRoom, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
+        Meeting newMeeting = new Meeting(idMeetingRoom, meetingSubject, meetingStartTime, meetingEndTime, meetingParticipants);
         mMeetings.add(newMeeting);
     }
 
@@ -136,11 +136,10 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     public void scheduleMeeting(Meeting meeting) {
         long idMeetingRoom = meeting.getMeetingRoomId();
         String meetingSubject = meeting.getMeetingSubject();
-        String meetingDay = meeting.getMeetingDay();
         long meetingStartTime = meeting.getMeetingStartTime();
         long meetingEndTime = meeting.getMeetingEndTime();
         List<String> meetingParticipants = meeting.getMeetingParticipants();
-        this.scheduleMeeting(idMeetingRoom, meetingSubject, meetingDay, meetingStartTime, meetingEndTime, meetingParticipants);
+        this.scheduleMeeting(idMeetingRoom, meetingSubject, meetingStartTime, meetingEndTime, meetingParticipants);
     }
 
     /**
@@ -158,14 +157,18 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     /**
      * Get all meetings occurring on a specific day
      *
-     * @param day the specific day
+     * @param dayTimeStamp the specific day timeStamp in ms
      * @return a list of meetings
      */
     @Override
-    public List<Meeting> getMeetingsForGivenDay(String day) {
+    public List<Meeting> getMeetingsForGivenDate(long dayTimeStamp) {
+        String givenDate = Utils.formatDate(dayTimeStamp);
+        givenDate = givenDate.substring(0, givenDate.length() - 6);
         List<Meeting> meetings = new ArrayList<>();
         for (int i = 0; i < mMeetings.size(); i++) {
-            if (mMeetings.get(i).getMeetingDay().equals(day)) {
+            String meetingDate = Utils.formatDate(mMeetings.get(i).getMeetingStartTime());
+            meetingDate = meetingDate.substring(0, meetingDate.length() - 6);
+            if (meetingDate.contentEquals(givenDate)) {
                 meetings.add(mMeetings.get(i));
             }
         }

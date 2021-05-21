@@ -7,15 +7,13 @@ public class Meeting {
 
     private long meetingRoomId;
     private String mMeetingSubject;
-    private String mMeetingDay;
     private long mMeetingStartTime;
     private long mMeetingEndTime;
     private List<String> mMeetingParticipants;
 
-    public Meeting(long meetingRoomId, String meetingSubject, String meetingDay, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
+    public Meeting(long meetingRoomId, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
         this.meetingRoomId = meetingRoomId;
         mMeetingSubject = meetingSubject;
-        mMeetingDay = meetingDay;
         mMeetingStartTime = meetingStartTime;
         mMeetingEndTime = meetingEndTime;
         mMeetingParticipants = meetingParticipants;
@@ -27,10 +25,6 @@ public class Meeting {
 
     public String getMeetingSubject() {
         return mMeetingSubject;
-    }
-
-    public String getMeetingDay() {
-        return mMeetingDay;
     }
 
     public long getMeetingStartTime() {
@@ -54,7 +48,6 @@ public class Meeting {
                 mMeetingStartTime == meeting.mMeetingStartTime &&
                 mMeetingEndTime == meeting.mMeetingEndTime &&
                 Objects.equals(mMeetingSubject, meeting.mMeetingSubject) &&
-                Objects.equals(mMeetingDay, meeting.mMeetingDay) &&
                 Objects.equals(mMeetingParticipants, meeting.mMeetingParticipants);
     }
 }
