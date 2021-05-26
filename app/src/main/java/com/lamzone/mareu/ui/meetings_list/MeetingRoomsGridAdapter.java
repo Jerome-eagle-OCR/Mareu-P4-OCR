@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.lamzone.mareu.model.MeetingRoom;
@@ -13,8 +12,8 @@ import java.util.List;
 
 public class MeetingRoomsGridAdapter extends BaseAdapter {
 
-    private final List<MeetingRoom> mMeetingRooms;
-    private final Context mContext;
+    private List<MeetingRoom> mMeetingRooms;
+    private Context mContext;
 
     public MeetingRoomsGridAdapter(List<MeetingRoom> meetingRooms, Context context) {
         mMeetingRooms = meetingRooms;
@@ -41,7 +40,6 @@ public class MeetingRoomsGridAdapter extends BaseAdapter {
         ImageView imageView = (ImageView) convertView;
         if (imageView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(316, 348));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         }
         imageView.setImageResource(mMeetingRooms.get(position).getMeetingRoomSymbol());

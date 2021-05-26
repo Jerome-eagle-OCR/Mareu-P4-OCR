@@ -13,7 +13,9 @@
             android:name=".ui.meetings_list.NewMeetingActivity"
             android:parentActivityName=".ui.meetings_list.MeetingsListActivity"
             android:theme="@style/Theme.Maréu.NoActionBar" />
-        <activity android:name=".ui.meetings_list.MeetingsListActivity">
+        <activity
+            android:name=".ui.meetings_list.MeetingsListActivity"
+            android:theme="@style/Theme.Maréu.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

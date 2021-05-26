@@ -18,7 +18,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginStart="18dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:src="@drawable/lamzone_mareu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -107,9 +107,9 @@
                 android:id="@+id/meeting_duration"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
                 android:focusable="false"
-                android:hint="Durée" />
+                android:hint="Durée"
+                android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -152,7 +152,7 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="60dp"
             android:layout_marginStart="18dp"
             android:layout_marginTop="445dp"
             android:layout_marginEnd="18dp"
@@ -167,9 +167,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/meeting_participants"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Participants"
-                android:inputType="textEmailAddress" />
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Participants" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -227,6 +229,30 @@
             android:src="@drawable/ic_person_add_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:id="@+id/chip_group_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="460dp"
+            android:layout_marginEnd="70dp"
+            android:paddingStart="11dp"
+            android:scrollbars="none"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                app:singleLine="true" />
+        </HorizontalScrollView>
 
 
         <com.google.android.material.button.MaterialButton

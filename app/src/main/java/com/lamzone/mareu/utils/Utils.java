@@ -25,7 +25,7 @@ public abstract class Utils {
     public static final String DUMMY_MEETING_SUBJECT = "Relecture de code application Maréu";
     public static final long DUMMY_MEETING_START_TIME = System.currentTimeMillis();
     public static final long DUMMY_MEETING_END_TIME = DUMMY_MEETING_START_TIME + (30 * 60000);
-    public static final List<String> DUMMY_MEETING_PARTICIPANTS = Arrays.asList("testParticipant1@lamzone.test", "testParticipant2@lamzone.test", "testParticipant3@lamzone.test");
+    public static final List<String> DUMMY_MEETING_PARTICIPANTS = Arrays.asList("dummyParticipant1@lamzone.com", "dummyParticipant2@lamzone.com", "dummyParticipant3@lamzone.com");
 
     //DUMMY_MEETING_ROOM3 is the only meeting room that can host our new DUMMY_MEETING
     public static final Meeting DUMMY_MEETING1 = new Meeting(DUMMY_MEETING_ROOM1, DUMMY_MEETING_SUBJECT, DUMMY_MEETING_START_TIME - 5 * 60000, DUMMY_MEETING_END_TIME - 10 * 60000, DUMMY_MEETING_PARTICIPANTS);

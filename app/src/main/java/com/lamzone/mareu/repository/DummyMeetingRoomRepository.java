@@ -5,6 +5,7 @@ import com.lamzone.mareu.model.MeetingRoom;
 import com.lamzone.mareu.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -149,8 +150,10 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
      */
     @Override
     public void cancelMeeting(Meeting meeting) {
-        for (int i = 0; i < mMeetings.size(); i++) {
-            if (mMeetings.get(i).equals(meeting)) mMeetings.remove(i);
+        for (Iterator<Meeting> iterator = mMeetings.iterator(); iterator.hasNext(); ) {
+            Meeting iMeeting = iterator.next();
+
+            if (iMeeting.equals(meeting)) iterator.remove();
         }
     }
 

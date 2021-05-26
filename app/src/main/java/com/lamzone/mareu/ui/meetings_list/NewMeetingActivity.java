@@ -3,20 +3,28 @@ package com.lamzone.mareu.ui.meetings_list;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.HorizontalScrollView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.lamzone.mareu.R;
 import com.lamzone.mareu.di.DI;
@@ -24,6 +32,7 @@ import com.lamzone.mareu.model.MeetingRoom;
 import com.lamzone.mareu.repository.MeetingRoomRepository;
 import com.lamzone.mareu.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -34,10 +43,15 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     private TextInputEditText mMeetingTime;
     private TextInputEditText mMeetingRoom;
     private TextInputEditText mMeetingDuration;
+    private TextInputEditText mMeetingParticipants;
+    private HorizontalScrollView mChipGroupScrollView;
+    private ChipGroup mChipGroup;
     private Spinner mMeetingDurationSpinner;
     private Button mScheduleMeetingButton;
 
     private MeetingRoomRepository repository;
+    private Calendar calendar;
+    private int chipId;
 
     private boolean isDateOk;
     private boolean isTimeOk;
@@ -45,10 +59,11 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     private boolean isRoomOk;
     private boolean isParticipantsOk;
 
-    Calendar calendar;
-
     private long mMeetingStartTimeMillis;
     private long mMeetingEndTimeMillis;
+    private long mMeetingDurationMillis;
+    private MeetingRoom clickedMeetingRoom;
+    private List<String> mMeetingParticipantsList;
 
 
     @Override
@@ -57,15 +72,16 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         setContentView(R.layout.activity_new_meeting);
 
         repository = DI.getMeetingRoomRepository();
-
         calendar = Calendar.getInstance();
 
         mMeetingDate = findViewById(R.id.meeting_date);
         mMeetingTime = findViewById(R.id.meeting_time);
         mMeetingRoom = findViewById(R.id.meeting_room);
         mMeetingDuration = findViewById(R.id.meeting_duration);
+        mMeetingParticipants = findViewById(R.id.meeting_participants);
+        mChipGroupScrollView = findViewById(R.id.chip_group_scrollview);
+        mChipGroup = findViewById(R.id.chip_group);
         mScheduleMeetingButton = findViewById(R.id.schedule_meeting);
-
 
         mMeetingDate.setOnClickListener(v -> {
             DialogFragment datePicker = new DatePickerFragment();
@@ -84,7 +100,6 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         mMeetingDuration.setOnClickListener(v -> {
             Toast.makeText(v.getContext(), "Veuillez d'abord saisir date et heure.", Toast.LENGTH_SHORT).show();
         });
-
         setMeetingDurationSpinnerAndListener();
 
         mMeetingRoom.setOnClickListener(v -> {
@@ -95,43 +110,54 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             }
         });
 
-        mScheduleMeetingButton.setOnClickListener(v -> {
-            //repository.scheduleMeeting();
+        mMeetingParticipantsList = new ArrayList<>();
+        mChipGroup.setOnClickListener(view -> mMeetingParticipants.performClick());
+        mMeetingParticipants.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            builder.setTitle("Saisir une adresse de courriel :").setIcon(AppCompatResources.getDrawable(v.getContext(), R.drawable.lamzone));
+            EditText inputEmail = new EditText(v.getContext());
+            inputEmail.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            inputEmail.setHint(" prénom.nom@lamzone.com");
+            inputEmail.setBackground(AppCompatResources.getDrawable(v.getContext(), R.drawable.lyr_input_participant_dlg));
+            builder.setView(inputEmail);
+            builder.setPositiveButton("AJOUTER", (dialog, which) -> {
+                if (inputEmail.getText().length() != 0 && inputEmail.getText().toString().contains("@")) {
+                    mMeetingParticipants.setText(" ");
+                    mMeetingParticipantsList.add(inputEmail.getText().toString());
+                    Chip chip = new Chip(NewMeetingActivity.this);
+                    chip.setText(inputEmail.getText());
+                    chip.setChipBackgroundColorResource(R.color.teal_200);
+                    chip.setCloseIconVisible(true);
+                    chip.setCloseIconTintResource(R.color.lamzoneDarker);
+                    chip.setTextColor(getResources().getColor(R.color.lamzoneDarker));
+                    chip.setId(chipId++);
+                    chip.setOnCloseIconClickListener(v1 -> {
+                        mChipGroup.removeView(v1);
+                        mMeetingParticipantsList.remove(chip.getText().toString());
+                        checkParticipants();
+                    });
+                    mChipGroup.addView(chip);
+                } else {
+                    Toast.makeText(v.getContext(), "Adresse non valide, aucun participant ajouté.", Toast.LENGTH_SHORT).show();
+                }
+                checkParticipants();
+            });
+            builder.show();
         });
-    }
 
-    private void setMeetingDurationSpinnerAndListener() {
-        mMeetingDurationSpinner = findViewById(R.id.meeting_duration_spinner);
-        mMeetingDurationSpinner.setVisibility(View.GONE);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.meeting_durations_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        mMeetingDurationSpinner.setAdapter(adapter);
-        mMeetingDurationSpinner.setOnItemSelectedListener(this);
-    }
-
-    private void showDialogMeetingRoomsGrid(View v) {
-        final Dialog dialog = new Dialog(v.getContext());
-        dialog.setContentView(R.layout.grid_meeting_rooms);
-
-        List<MeetingRoom> availableMeetingRooms = repository.getFreeMeetingRoomsAtGivenSlot(mMeetingStartTimeMillis, mMeetingEndTimeMillis);
-
-        MeetingRoomsGridAdapter meetingRoomsGridAdapter = new MeetingRoomsGridAdapter(availableMeetingRooms, v.getContext());
-
-        GridView meetingRoomsGrid = dialog.findViewById(R.id.meeting_rooms_grid);
-        meetingRoomsGrid.setAdapter(meetingRoomsGridAdapter);
-
-        dialog.show();
-
-        meetingRoomsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MeetingRoom clickedMeetingRoom = meetingRoomsGridAdapter.getItem(position);
-                mMeetingRoom.setText(clickedMeetingRoom.getMeetingRoomName());
-                isRoomOk = true;
-                couldEnableScheduleButton();
-                dialog.dismiss();
-            }
+        mScheduleMeetingButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            builder.setTitle("Entrer le sujet de la réunion :").setIcon(AppCompatResources.getDrawable(v.getContext(), R.drawable.lamzone));
+            EditText inputSubject = new EditText(v.getContext());
+            inputSubject.setHint(" Sujet");
+            inputSubject.setBackground(AppCompatResources.getDrawable(v.getContext(), R.drawable.lyr_input_participant_dlg));
+            builder.setView(inputSubject);
+            builder.setPositiveButton("Ajouter la nouvelle réunion", (dialogInterface, i) -> {
+                repository.scheduleMeeting(clickedMeetingRoom.getId(), inputSubject.getText().toString(), mMeetingStartTimeMillis, mMeetingEndTimeMillis, mMeetingParticipantsList);
+                Intent meetingsListActivityIntent = new Intent(v.getContext(), MeetingsListActivity.class);
+                startActivity(meetingsListActivityIntent);
+            });
+            builder.show();
         });
     }
 
@@ -156,17 +182,62 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             mMeetingTime.setText(selectedTime);
             isTimeOk = true;
             mMeetingDurationSpinner.setVisibility(View.VISIBLE);
-            mMeetingStartTimeMillis = calendar.getTimeInMillis();
         }
+    }
+
+    private void setMeetingDurationSpinnerAndListener() {
+        mMeetingDurationSpinner = findViewById(R.id.meeting_duration_spinner);
+        mMeetingDurationSpinner.setVisibility(View.GONE);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.meeting_durations_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        mMeetingDurationSpinner.setAdapter(adapter);
+        mMeetingDurationSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedDuration = parent.getItemAtPosition(position).toString();
         mMeetingDuration.setText(selectedDuration);
-        long meetingDurationMillis = position * 15 * 60000;
-        mMeetingEndTimeMillis = mMeetingStartTimeMillis + meetingDurationMillis;
-        isDurationOk = meetingDurationMillis != 0;
+        mMeetingDurationMillis = position * 15 * 60000;
+        isDurationOk = mMeetingDurationMillis != 0;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    private void showDialogMeetingRoomsGrid(View v) {
+        Dialog dialog = new Dialog(v.getContext());
+        dialog.setContentView(R.layout.grid_meeting_rooms);
+
+        mMeetingStartTimeMillis = calendar.getTimeInMillis();
+        mMeetingEndTimeMillis = mMeetingStartTimeMillis + mMeetingDurationMillis;
+        List<MeetingRoom> availableMeetingRooms = repository.getFreeMeetingRoomsAtGivenSlot(mMeetingStartTimeMillis, mMeetingEndTimeMillis);
+        MeetingRoomsGridAdapter meetingRoomsGridAdapter = new MeetingRoomsGridAdapter(availableMeetingRooms, v.getContext());
+
+        GridView meetingRoomsGrid = dialog.findViewById(R.id.meeting_rooms_grid);
+        meetingRoomsGrid.setAdapter(meetingRoomsGridAdapter);
+        meetingRoomsGrid.setOnItemClickListener((parent, view, position, id) -> {
+            clickedMeetingRoom = meetingRoomsGridAdapter.getItem(position);
+            mMeetingRoom.setText(clickedMeetingRoom.getMeetingRoomName());
+            isRoomOk = true;
+            dialog.dismiss();
+            couldEnableScheduleButton();
+        });
+        dialog.show();
+    }
+
+    private void checkParticipants() {
+        if (mChipGroup.getChildCount() != 0) {
+            isParticipantsOk = true;
+            mChipGroupScrollView.setVisibility(View.VISIBLE);
+        } else {
+            isParticipantsOk = false;
+            mChipGroupScrollView.setVisibility(View.INVISIBLE);
+            mMeetingParticipants.setText(null);
+        }
+        couldEnableScheduleButton();
     }
 
     private void couldEnableScheduleButton() {
@@ -174,6 +245,12 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    protected void onResume() {
+        super.onResume();
+        mMeetingDate.setText("");
+        mMeetingTime.setText("");
+        mMeetingRoom.setText("");
+        mMeetingDuration.setText("");
+        mMeetingParticipants.setText("");
     }
 }

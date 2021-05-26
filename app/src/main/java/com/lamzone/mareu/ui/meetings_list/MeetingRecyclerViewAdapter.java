@@ -20,9 +20,8 @@ import com.lamzone.mareu.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
-
-import static androidx.appcompat.content.res.AppCompatResources.getDrawable;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.MeetingViewHolder> {
 
@@ -69,9 +68,9 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
         Meeting currentMeeting = mMeetings.get(position);
         MeetingRoom currentMeetingRoom = repository.getMeetingRoomById(currentMeeting.getMeetingRoomId());
         holder.mMeetingRoomName.setText(currentMeetingRoom.getMeetingRoomName());
-        holder.mMeetingRoomSymbol.setImageDrawable(getDrawable(holder.mMeetingRoomName.getContext(), currentMeetingRoom.getMeetingRoomSymbol()));
+        holder.mMeetingRoomSymbol.setImageResource(currentMeetingRoom.getMeetingRoomSymbol());
         holder.mMeetingSubject.setText(currentMeeting.getMeetingSubject());
-        holder.mMeetingParticipants.setText(currentMeeting.getMeetingParticipants().toString());
+        holder.mMeetingParticipants.setText(currentMeeting.getMeetingParticipants().toString().replaceAll("\\[|\\]", ""));
         holder.mMeetingDate.setText(Utils.formatDate(currentMeeting.getMeetingStartTime()));
 
         holder.mMeetingDelete.setOnClickListener(new View.OnClickListener() {
@@ -85,5 +84,11 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
     @Override
     public int getItemCount() {
         return mMeetings.size();
+    }
+
+    public void refreshList(List<Meeting> meetings) {
+        mMeetings = meetings;
+        Collections.sort(mMeetings, new Utils.SortByStartTime());
+        notifyDataSetChanged();
     }
 }

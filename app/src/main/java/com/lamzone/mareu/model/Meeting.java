@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class Meeting {
 
-    private long meetingRoomId;
-    private String mMeetingSubject;
-    private long mMeetingStartTime;
-    private long mMeetingEndTime;
-    private List<String> mMeetingParticipants;
+    private final long meetingRoomId;
+    private final String mMeetingSubject;
+    private final long mMeetingStartTime;
+    private final long mMeetingEndTime;
+    private final List<String> mMeetingParticipants;
 
     public Meeting(long meetingRoomId, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
         this.meetingRoomId = meetingRoomId;
