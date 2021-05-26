@@ -15,7 +15,7 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
 
     private final List<MeetingRoom> meetingRooms;
 
-    private List<Meeting> mMeetings = new ArrayList<>();
+    private final List<Meeting> mMeetings = new ArrayList<>();
 
     /**
      * DummyMeetingRoomRepository constructor valorizing  meeting rooms list

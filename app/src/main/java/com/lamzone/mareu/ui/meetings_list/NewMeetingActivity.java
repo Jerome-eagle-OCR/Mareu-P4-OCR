@@ -35,6 +35,7 @@ import com.lamzone.mareu.utils.Utils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class NewMeetingActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, AdapterView.OnItemSelectedListener {
 
@@ -52,12 +53,6 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     private MeetingRoomRepository repository;
     private Calendar calendar;
     private int chipId;
-
-    private boolean isDateOk;
-    private boolean isTimeOk;
-    private boolean isDurationOk;
-    private boolean isRoomOk;
-    private boolean isParticipantsOk;
 
     private long mMeetingStartTimeMillis;
     private long mMeetingEndTimeMillis;
@@ -84,13 +79,14 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         mScheduleMeetingButton = findViewById(R.id.schedule_meeting);
 
         mMeetingDate.setOnClickListener(v -> {
+            //Toast.makeText(this, Objects.requireNonNull(mMeetingDate.getText()).toString(), Toast.LENGTH_LONG).show();
             DialogFragment datePicker = new DatePickerFragment();
             datePicker.show(getSupportFragmentManager(), "date picker");
         });
 
         mMeetingTime.setOnClickListener(v -> {
             DialogFragment timePicker = new TimePickerFragment();
-            if (isDateOk) {
+            if (!Objects.requireNonNull(mMeetingDate.getText()).toString().isEmpty()) {
                 timePicker.show(getSupportFragmentManager(), "time picker");
             } else {
                 Toast.makeText(v.getContext(), "Veuillez d'abord saisir une date.", Toast.LENGTH_SHORT).show();
@@ -98,12 +94,17 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         });
 
         mMeetingDuration.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Veuillez d'abord saisir date et heure.", Toast.LENGTH_SHORT).show();
+            if (!Objects.requireNonNull(mMeetingTime.getText()).toString().isEmpty()) {
+                mMeetingDurationSpinner.setVisibility(View.VISIBLE);
+                mMeetingDurationSpinner.performClick();
+            } else {
+                Toast.makeText(v.getContext(), "Veuillez d'abord saisir date et heure.", Toast.LENGTH_SHORT).show();
+            }
         });
         setMeetingDurationSpinnerAndListener();
 
         mMeetingRoom.setOnClickListener(v -> {
-            if (isDurationOk) {
+            if (!Objects.requireNonNull(mMeetingDuration.getText()).toString().isEmpty()) {
                 showDialogMeetingRoomsGrid(v);
             } else {
                 Toast.makeText(v.getContext(), "Veuillez d'abord saisir date, heure et durée.", Toast.LENGTH_SHORT).show();
@@ -169,8 +170,8 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         String selectedDate = Utils.formatDate(calendar, Utils.DATE_FORMAT_1);
         if (!selectedDate.isEmpty()) {
             mMeetingDate.setText(selectedDate);
-            isDateOk = true;
         }
+        mMeetingRoom.setText(null);
     }
 
     @Override
@@ -180,9 +181,9 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         String selectedTime = Utils.formatDate(calendar, Utils.TIME_FORMAT);
         if (!selectedTime.isEmpty()) {
             mMeetingTime.setText(selectedTime);
-            isTimeOk = true;
             mMeetingDurationSpinner.setVisibility(View.VISIBLE);
         }
+        mMeetingRoom.setText(null);
     }
 
     private void setMeetingDurationSpinnerAndListener() {
@@ -199,8 +200,8 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedDuration = parent.getItemAtPosition(position).toString();
         mMeetingDuration.setText(selectedDuration);
-        mMeetingDurationMillis = position * 15 * 60000;
-        isDurationOk = mMeetingDurationMillis != 0;
+        mMeetingDurationMillis = (position + 1) * 15 * 60000;
+        mMeetingRoom.setText(null);
     }
 
     @Override
@@ -221,7 +222,6 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         meetingRoomsGrid.setOnItemClickListener((parent, view, position, id) -> {
             clickedMeetingRoom = meetingRoomsGridAdapter.getItem(position);
             mMeetingRoom.setText(clickedMeetingRoom.getMeetingRoomName());
-            isRoomOk = true;
             dialog.dismiss();
             couldEnableScheduleButton();
         });
@@ -230,10 +230,8 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
 
     private void checkParticipants() {
         if (mChipGroup.getChildCount() != 0) {
-            isParticipantsOk = true;
             mChipGroupScrollView.setVisibility(View.VISIBLE);
         } else {
-            isParticipantsOk = false;
             mChipGroupScrollView.setVisibility(View.INVISIBLE);
             mMeetingParticipants.setText(null);
         }
@@ -241,7 +239,11 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     }
 
     private void couldEnableScheduleButton() {
-        mScheduleMeetingButton.setEnabled(isDateOk && isTimeOk && isDurationOk && isRoomOk && isParticipantsOk);
+        mScheduleMeetingButton.setEnabled(mMeetingDate.getText() != null
+                && mMeetingTime.getText() != null
+                && mMeetingDuration.getText() != null
+                && mMeetingRoom.getText() != null
+                && mMeetingParticipants.getText() != null);
     }
 
     @Override

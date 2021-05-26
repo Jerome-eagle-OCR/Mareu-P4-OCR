@@ -37,7 +37,7 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
     private Toolbar mToolbar;
     private FloatingActionButton mNewMeetingButton;
 
-    private MeetingRoomRepository repository;
+    private MeetingRoomRepository repository = DI.getMeetingRoomRepository();
     List<Meeting> meetingList = new ArrayList<>();
 
 
@@ -46,7 +46,7 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meetings_list);
 
-        repository = DI.getMeetingRoomRepository();
+        if (savedInstanceState != null) repository = DI.getNewMeetingRoomRepository();
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);

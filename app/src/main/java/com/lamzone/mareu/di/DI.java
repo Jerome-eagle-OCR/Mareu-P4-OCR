@@ -8,12 +8,17 @@ public class DI {
     /**
      * Dependency injector to get instance of repository
      */
-    public static MeetingRoomRepository repository = new DummyMeetingRoomRepository(false);
+    private static MeetingRoomRepository repository = new DummyMeetingRoomRepository(false);
 
     /**
      * @return
      */
     public static MeetingRoomRepository getMeetingRoomRepository() {
+        return repository;
+    }
+
+    public static MeetingRoomRepository getNewMeetingRoomRepository() {
+        repository = new DummyMeetingRoomRepository(false);
         return repository;
     }
 
