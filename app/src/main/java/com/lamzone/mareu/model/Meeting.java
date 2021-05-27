@@ -1,7 +1,6 @@
 package com.lamzone.mareu.model;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Meeting {
 
@@ -43,11 +42,13 @@ public class Meeting {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Meeting meeting = (Meeting) o;
-        return meetingRoomId == meeting.meetingRoomId &&
-                mMeetingStartTime == meeting.mMeetingStartTime &&
-                mMeetingEndTime == meeting.mMeetingEndTime &&
-                Objects.equals(mMeetingSubject, meeting.mMeetingSubject) &&
-                Objects.equals(mMeetingParticipants, meeting.mMeetingParticipants);
+
+        if (meetingRoomId != meeting.meetingRoomId) return false;
+        if (mMeetingStartTime != meeting.mMeetingStartTime) return false;
+        if (mMeetingEndTime != meeting.mMeetingEndTime) return false;
+        if (!mMeetingSubject.equals(meeting.mMeetingSubject)) return false;
+        return mMeetingParticipants.equals(meeting.mMeetingParticipants);
     }
 }

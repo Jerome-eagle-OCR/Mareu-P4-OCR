@@ -249,10 +249,10 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     @Override
     protected void onResume() {
         super.onResume();
-        mMeetingDate.setText("");
-        mMeetingTime.setText("");
-        mMeetingRoom.setText("");
-        mMeetingDuration.setText("");
-        mMeetingParticipants.setText("");
+        mMeetingDate.setText(null);
+        mMeetingTime.setText(null);
+        mMeetingRoom.setText(null);
+        mMeetingDuration.setText(null);
+        mMeetingParticipants.setText(null);
     }
 }

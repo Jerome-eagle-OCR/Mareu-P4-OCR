@@ -104,6 +104,8 @@ public class MeetingRoomRepositoryTest {
         //When : we schedule our new meeting
         //Then : the new meeting is scheduled (added in meetings list)
         repository.scheduleMeeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS);
+        repository.scheduleMeeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS);
+        assertEquals(1, repository.getMeetings().size());
         assertEquals(repository.getMeetingsForGivenMeetingRoom(TEST_MEETING_ROOM3).get(0), new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS));
     }
 
@@ -113,7 +115,9 @@ public class MeetingRoomRepositoryTest {
         //When : we schedule our new meeting
         //Then : the new meeting is scheduled (added in meetings list)
         repository.scheduleMeeting(TEST_MEETING1);
-        assertEquals(repository.getMeetingsForGivenMeetingRoom(TEST_MEETING_ROOM1).get(0), TEST_MEETING1);
+        repository.scheduleMeeting(TEST_MEETING1);
+        assertEquals(1, repository.getMeetings().size());
+        assertEquals(TEST_MEETING1, repository.getMeetings().get(0));
     }
 
     @Test

@@ -125,7 +125,14 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     @Override
     public void scheduleMeeting(long idMeetingRoom, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
         Meeting newMeeting = new Meeting(idMeetingRoom, meetingSubject, meetingStartTime, meetingEndTime, meetingParticipants);
-        mMeetings.add(newMeeting);
+        boolean isNotAlreadyInList = true;
+        for (Meeting meeting : mMeetings) {
+            if (newMeeting.equals(meeting)) {
+                isNotAlreadyInList = false;
+                break;
+            }
+        }
+        if (isNotAlreadyInList) mMeetings.add(newMeeting);
     }
 
     /**
