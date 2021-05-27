@@ -25,10 +25,9 @@ import com.lamzone.mareu.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
-public class MeetingsListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class MeetingListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private RecyclerView mRecyclerView;
     private MeetingRecyclerViewAdapter mAdapter;
@@ -37,8 +36,8 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
     private Toolbar mToolbar;
     private FloatingActionButton mNewMeetingButton;
 
-    private MeetingRoomRepository repository = DI.getMeetingRoomRepository();
-    List<Meeting> meetingList = new ArrayList<>();
+    private MeetingRoomRepository repository;
+    private List<Meeting> meetingList = new ArrayList<>();
 
 
     @Override
@@ -51,14 +50,12 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        for (int i = 0; i < Utils.DUMMY_MEETINGS.size(); i++) {
-            repository.scheduleMeeting(Utils.DUMMY_MEETINGS.get(i));
-        }
+        repository = DI.getMeetingRoomRepository();
+        repository.getMeetings().addAll(Utils.DUMMY_MEETINGS);
         meetingList = repository.getMeetings();
-        Collections.sort(meetingList, new Utils.SortByStartTime());
 
         mRecyclerView = findViewById(R.id.meeting_list);
-        mRecyclerView.hasFixedSize();
+        //mRecyclerView.hasFixedSize();
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new MeetingRecyclerViewAdapter(meetingList);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -66,7 +63,7 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
 
         mNewMeetingButton = findViewById(R.id.create_meeting);
         mNewMeetingButton.setOnClickListener(v -> {
-            Intent newMeetingActivityIntent = new Intent(MeetingsListActivity.this, NewMeetingActivity.class);
+            Intent newMeetingActivityIntent = new Intent(MeetingListActivity.this, NewMeetingActivity.class);
             startActivity(newMeetingActivityIntent);
         });
         mNewMeetingButton.setOnLongClickListener(v -> {
@@ -89,20 +86,22 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
                 datePicker.show(getSupportFragmentManager(), "date picker");
                 break;
             case 2:
-                final Dialog dialog = new Dialog(MeetingsListActivity.this);
+                final Dialog dialog = new Dialog(MeetingListActivity.this);
                 dialog.setContentView(R.layout.grid_meeting_rooms);
-                MeetingRoomsGridAdapter meetingRoomsGridAdapter = new MeetingRoomsGridAdapter(repository.getMeetingRooms(), MeetingsListActivity.this);
+                MeetingRoomsGridAdapter meetingRoomsGridAdapter = new MeetingRoomsGridAdapter(repository.getMeetingRooms(), MeetingListActivity.this);
                 GridView meetingRoomsGrid = dialog.findViewById(R.id.meeting_rooms_grid);
                 meetingRoomsGrid.setAdapter(meetingRoomsGridAdapter);
                 dialog.show();
                 meetingRoomsGrid.setOnItemClickListener((parent, view, position, id) -> {
                     long selectedMeetingRoomId = meetingRoomsGridAdapter.getItem(position).getId();
                     mAdapter.refreshList(repository.getMeetingsForGivenMeetingRoom(selectedMeetingRoomId));
+                    mAdapter.setIsFilteredList(true);
                     dialog.dismiss();
                 });
                 break;
             case 3:
                 mAdapter.refreshList(repository.getMeetings());
+                mAdapter.setIsFilteredList(false);
                 break;
             default:
         }
@@ -116,5 +115,6 @@ public class MeetingsListActivity extends AppCompatActivity implements DatePicke
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         mAdapter.refreshList(repository.getMeetingsForGivenDate(calendar.getTimeInMillis()));
+        mAdapter.setIsFilteredList(true);
     }
 }

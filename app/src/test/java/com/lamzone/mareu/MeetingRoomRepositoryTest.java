@@ -12,6 +12,8 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,22 +25,23 @@ public class MeetingRoomRepositoryTest {
     private static final long TEST_MEETING_ROOM2 = DummyMeetingRoomGenerator.DUMMY_MEETING_ROOMS.get(1).getId();
     private static final long TEST_MEETING_ROOM3 = TEST_FREE_MEETING_ROOM.getId();
     private static final String TEST_MEETING_SUBJECT = "Test";
-    private static final long TEST_MEETING_START_TIME = 1621590917351L;
-    private static final long TEST_MEETING_DATE = TEST_MEETING_START_TIME + 1440 * 60000;
-    private static final long TEST_MEETING_END_TIME = TEST_MEETING_START_TIME + 30 * 60000;
+    private static final long TEST_MEETING_START_TIME = System.currentTimeMillis();
+    private static final long TEST_MEETING_DATE = TEST_MEETING_START_TIME + 1440 * 60000; //+24h
+    private static final long TEST_MEETING_END_TIME = TEST_MEETING_START_TIME + 30 * 60000;//+30mn
     private static final List<String> TEST_MEETING_PARTICIPANTS = Arrays.asList("testParticipant1@lamzone.test", "testParticipant2@lamzone.test", "testParticipant3@lamzone.test");
 
     //TEST_MEETING_ROOM3 is the only meeting room that can host our new TEST_MEETING
     private static final Meeting TEST_MEETING1 = new Meeting(TEST_MEETING_ROOM1, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME - 5 * 60000, TEST_MEETING_END_TIME - 10 * 60000, TEST_MEETING_PARTICIPANTS);
     private static final Meeting TEST_MEETING2 = new Meeting(TEST_MEETING_ROOM2, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME - 30 * 60000, TEST_MEETING_START_TIME - 0, TEST_MEETING_PARTICIPANTS);
-    private static final Meeting TEST_MEETING4 = new Meeting(TEST_MEETING_ROOM2, TEST_MEETING_SUBJECT, TEST_MEETING_END_TIME - 5 * 60000, TEST_MEETING_END_TIME + 10 * 60000, TEST_MEETING_PARTICIPANTS);
-    private static final Meeting TEST_MEETING3 = new Meeting(TEST_MEETING_ROOM2, TEST_MEETING_SUBJECT, TEST_MEETING_END_TIME + 0, TEST_MEETING_END_TIME + 15 * 60000, TEST_MEETING_PARTICIPANTS);
+    private static final Meeting TEST_MEETING3 = new Meeting(TEST_MEETING_ROOM2, TEST_MEETING_SUBJECT, TEST_MEETING_END_TIME - 5 * 60000, TEST_MEETING_END_TIME + 10 * 60000, TEST_MEETING_PARTICIPANTS);
+    private static final Meeting TEST_MEETING4 = new Meeting(TEST_MEETING_ROOM2, TEST_MEETING_SUBJECT, TEST_MEETING_END_TIME + 0, TEST_MEETING_END_TIME + 15 * 60000, TEST_MEETING_PARTICIPANTS);
     private static final Meeting TEST_MEETING5 = new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME - 15 * 60000, TEST_MEETING_START_TIME - 0, TEST_MEETING_PARTICIPANTS);
     private static final Meeting TEST_MEETING6 = new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME - 30 * 60000, TEST_MEETING_START_TIME - 15 * 60000, TEST_MEETING_PARTICIPANTS);
     private static final Meeting TEST_MEETING7 = new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_END_TIME + 5 * 60000, TEST_MEETING_END_TIME + 20 * 60000, TEST_MEETING_PARTICIPANTS);
     private static final Meeting TEST_MEETING8 = new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_END_TIME + 20 * 60000, TEST_MEETING_END_TIME + 45 * 60000, TEST_MEETING_PARTICIPANTS);
 
-    public static final List<Meeting> TEST_MEETINGS = Arrays.asList(TEST_MEETING1, TEST_MEETING2, TEST_MEETING3, TEST_MEETING4, TEST_MEETING5, TEST_MEETING6, TEST_MEETING7, TEST_MEETING8);
+    public static final List<Meeting> TEST_MEETINGS = Arrays.asList(TEST_MEETING2, TEST_MEETING6, TEST_MEETING5, TEST_MEETING1, TEST_MEETING3, TEST_MEETING4, TEST_MEETING7, TEST_MEETING8);
+
 
     private MeetingRoomRepository repository;
 
@@ -83,9 +86,9 @@ public class MeetingRoomRepositoryTest {
         //Given : we want the list of meetings taking place in a given meeting room
         //When : we retrieve the list of meetings
         //Then : the retrieved list equals the expected list
-        repository.getMeetings().addAll(TEST_MEETINGS.subList(0, 5));
-        List<Meeting> meetings = repository.getMeetingsForGivenMeetingRoom(TEST_MEETING_ROOM2);
-        assertEquals(TEST_MEETINGS.subList(1, 4), meetings);
+        repository.getMeetings().addAll(TEST_MEETINGS);
+        List<Meeting> expectedList = Stream.concat(TEST_MEETINGS.subList(0, 1).stream(), TEST_MEETINGS.subList(4, 6).stream()).collect(Collectors.toList());
+        assertEquals(expectedList, repository.getMeetingsForGivenMeetingRoom(TEST_MEETING_ROOM2));
     }
 
     @Test
@@ -104,9 +107,7 @@ public class MeetingRoomRepositoryTest {
         //When : we schedule our new meeting
         //Then : the new meeting is scheduled (added in meetings list)
         repository.scheduleMeeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS);
-        repository.scheduleMeeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS);
-        assertEquals(1, repository.getMeetings().size());
-        assertEquals(repository.getMeetingsForGivenMeetingRoom(TEST_MEETING_ROOM3).get(0), new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS));
+        assertEquals(new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_START_TIME, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS), repository.getMeetingsForGivenMeetingRoom(TEST_MEETING_ROOM3).get(0));
     }
 
     @Test
@@ -115,8 +116,6 @@ public class MeetingRoomRepositoryTest {
         //When : we schedule our new meeting
         //Then : the new meeting is scheduled (added in meetings list)
         repository.scheduleMeeting(TEST_MEETING1);
-        repository.scheduleMeeting(TEST_MEETING1);
-        assertEquals(1, repository.getMeetings().size());
         assertEquals(TEST_MEETING1, repository.getMeetings().get(0));
     }
 
@@ -133,13 +132,14 @@ public class MeetingRoomRepositoryTest {
 
     @Test
     public void getMeetingsForGivenDateWithSuccess() {
-        //Given : we want to get all meetings occurring at a given day
+        //Given : we want to get all meetings occurring at a given date (day)
         //When : we retrieve the meetings
         //Then : we get the expected list of meetings
         repository.scheduleMeeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_DATE, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS);
         for (int i = 0; i < TEST_MEETINGS.size(); i++) {
             repository.scheduleMeeting(TEST_MEETINGS.get(i));
         }
-        assertEquals(repository.getMeetings().subList(0, 1), repository.getMeetingsForGivenDate(TEST_MEETING_DATE));
+        List<Meeting> expectedList = Collections.singletonList(new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_DATE, TEST_MEETING_END_TIME, TEST_MEETING_PARTICIPANTS));
+        assertEquals(expectedList, repository.getMeetingsForGivenDate(TEST_MEETING_DATE));
     }
 }

@@ -67,16 +67,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            app:layout_constraintWidth_percent="0.434"
             android:layout_height="60dp"
             android:layout_marginStart="18dp"
-            android:layout_marginTop="205dp"
+            android:layout_marginTop="285dp"
             android:layout_marginEnd="18dp"
             app:boxCornerRadiusBottomEnd="2dp"
             app:boxCornerRadiusBottomStart="2dp"
             app:boxCornerRadiusTopEnd="2dp"
             app:boxCornerRadiusTopStart="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -90,8 +89,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
             android:layout_height="60dp"
+            app:layout_constraintWidth_percent="0.434"
             android:layout_marginStart="18dp"
             android:layout_marginTop="285dp"
             android:layout_marginEnd="18dp"
@@ -100,7 +99,6 @@
             app:boxCornerRadiusTopEnd="2dp"
             app:boxCornerRadiusTopStart="2dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -189,11 +187,11 @@
             style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_marginTop="222dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="302dp"
+            android:layout_marginStart="147dp"
             android:background="@color/white"
             android:src="@drawable/ic_time_24"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView

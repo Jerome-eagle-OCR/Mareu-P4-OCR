@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public class NewMeetingActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, AdapterView.OnItemSelectedListener {
+public class NewMeetingActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, AdapterView.OnItemSelectedListener, View.OnClickListener {
 
 
     private TextInputEditText mMeetingDate;
@@ -77,39 +77,9 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         mChipGroupScrollView = findViewById(R.id.chip_group_scrollview);
         mChipGroup = findViewById(R.id.chip_group);
         mScheduleMeetingButton = findViewById(R.id.schedule_meeting);
+        resetAll();
 
-        mMeetingDate.setOnClickListener(v -> {
-            //Toast.makeText(this, Objects.requireNonNull(mMeetingDate.getText()).toString(), Toast.LENGTH_LONG).show();
-            DialogFragment datePicker = new DatePickerFragment();
-            datePicker.show(getSupportFragmentManager(), "date picker");
-        });
-
-        mMeetingTime.setOnClickListener(v -> {
-            DialogFragment timePicker = new TimePickerFragment();
-            if (!Objects.requireNonNull(mMeetingDate.getText()).toString().isEmpty()) {
-                timePicker.show(getSupportFragmentManager(), "time picker");
-            } else {
-                Toast.makeText(v.getContext(), "Veuillez d'abord saisir une date.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mMeetingDuration.setOnClickListener(v -> {
-            if (!Objects.requireNonNull(mMeetingTime.getText()).toString().isEmpty()) {
-                mMeetingDurationSpinner.setVisibility(View.VISIBLE);
-                mMeetingDurationSpinner.performClick();
-            } else {
-                Toast.makeText(v.getContext(), "Veuillez d'abord saisir date et heure.", Toast.LENGTH_SHORT).show();
-            }
-        });
         setMeetingDurationSpinnerAndListener();
-
-        mMeetingRoom.setOnClickListener(v -> {
-            if (!Objects.requireNonNull(mMeetingDuration.getText()).toString().isEmpty()) {
-                showDialogMeetingRoomsGrid(v);
-            } else {
-                Toast.makeText(v.getContext(), "Veuillez d'abord saisir date, heure et durée.", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         mMeetingParticipantsList = new ArrayList<>();
         mChipGroup.setOnClickListener(view -> mMeetingParticipants.performClick());
@@ -155,7 +125,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             builder.setView(inputSubject);
             builder.setPositiveButton("Ajouter la nouvelle réunion", (dialogInterface, i) -> {
                 repository.scheduleMeeting(clickedMeetingRoom.getId(), inputSubject.getText().toString(), mMeetingStartTimeMillis, mMeetingEndTimeMillis, mMeetingParticipantsList);
-                Intent meetingsListActivityIntent = new Intent(v.getContext(), MeetingsListActivity.class);
+                Intent meetingsListActivityIntent = new Intent(v.getContext(), MeetingListActivity.class);
                 startActivity(meetingsListActivityIntent);
             });
             builder.show();
@@ -181,7 +151,6 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         String selectedTime = Utils.formatDate(calendar, Utils.TIME_FORMAT);
         if (!selectedTime.isEmpty()) {
             mMeetingTime.setText(selectedTime);
-            mMeetingDurationSpinner.setVisibility(View.VISIBLE);
         }
         mMeetingRoom.setText(null);
     }
@@ -215,8 +184,8 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         mMeetingStartTimeMillis = calendar.getTimeInMillis();
         mMeetingEndTimeMillis = mMeetingStartTimeMillis + mMeetingDurationMillis;
         List<MeetingRoom> availableMeetingRooms = repository.getFreeMeetingRoomsAtGivenSlot(mMeetingStartTimeMillis, mMeetingEndTimeMillis);
-        MeetingRoomsGridAdapter meetingRoomsGridAdapter = new MeetingRoomsGridAdapter(availableMeetingRooms, v.getContext());
 
+        MeetingRoomsGridAdapter meetingRoomsGridAdapter = new MeetingRoomsGridAdapter(availableMeetingRooms, v.getContext());
         GridView meetingRoomsGrid = dialog.findViewById(R.id.meeting_rooms_grid);
         meetingRoomsGrid.setAdapter(meetingRoomsGridAdapter);
         meetingRoomsGrid.setOnItemClickListener((parent, view, position, id) -> {
@@ -239,20 +208,58 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     }
 
     private void couldEnableScheduleButton() {
-        mScheduleMeetingButton.setEnabled(mMeetingDate.getText() != null
-                && mMeetingTime.getText() != null
-                && mMeetingDuration.getText() != null
-                && mMeetingRoom.getText() != null
-                && mMeetingParticipants.getText() != null);
+        mScheduleMeetingButton.setEnabled(!Objects.requireNonNull(mMeetingDate.getText()).toString().equals("")
+                && !Objects.requireNonNull(mMeetingTime.getText()).toString().equals("")
+                && !Objects.requireNonNull(mMeetingDuration.getText()).toString().equals("")
+                && !Objects.requireNonNull(mMeetingRoom.getText()).toString().equals("")
+                && !Objects.requireNonNull(mMeetingParticipants.getText()).toString().equals(""));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        resetAll();
+    }
+
+    private void resetAll() {
         mMeetingDate.setText(null);
         mMeetingTime.setText(null);
         mMeetingRoom.setText(null);
         mMeetingDuration.setText(null);
         mMeetingParticipants.setText(null);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.meeting_date:
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+                break;
+            case R.id.meeting_time:
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
+                break;
+            case R.id.meeting_duration:
+                mMeetingDurationSpinner.setVisibility(View.VISIBLE);
+                mMeetingDurationSpinner.performClick();
+                break;
+            case R.id.meeting_room:
+                if (Objects.requireNonNull(mMeetingDate.getText()).toString().equals("")
+                        || Objects.requireNonNull(mMeetingTime.getText()).toString().equals("")
+                        || Objects.requireNonNull(mMeetingDuration.getText()).toString().equals("")) {
+                    Toast.makeText(v.getContext(), "Veuillez d'abord saisir date, heure et durée.", Toast.LENGTH_SHORT).show();
+                } else {
+                    showDialogMeetingRoomsGrid(v);
+                }
+                break;
+            /*case R.id.meeting_participants:
+
+                break;
+            case R.id.schedule_meeting:
+
+                break;*/
+            default:
+        }
     }
 }

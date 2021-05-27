@@ -19,14 +19,13 @@ import com.lamzone.mareu.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.MeetingViewHolder> {
 
     private List<Meeting> mMeetings;
-
     private MeetingRoomRepository repository = DI.getMeetingRoomRepository();
+    private boolean mIsFilteredList;
 
     public MeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
@@ -76,7 +75,11 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
             @Override
             public void onClick(View v) {
                 repository.cancelMeeting(currentMeeting);
-                refreshList(repository.getMeetings());
+                notifyItemRemoved(holder.getAbsoluteAdapterPosition());
+                if (mIsFilteredList) {
+                    mMeetings.remove(currentMeeting);
+                    notifyDataSetChanged();
+                }
             }
         });
     }
@@ -88,7 +91,10 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
 
     public void refreshList(List<Meeting> meetings) {
         mMeetings = meetings;
-        Collections.sort(mMeetings, new Utils.SortByStartTime());
         notifyDataSetChanged();
+    }
+
+    public void setIsFilteredList(boolean isFilteredList) {
+        mIsFilteredList = isFilteredList;
     }
 }

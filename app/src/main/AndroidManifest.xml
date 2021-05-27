@@ -11,10 +11,10 @@
         android:theme="@style/Theme.Maréu">
         <activity
             android:name=".ui.meetings_list.NewMeetingActivity"
-            android:parentActivityName=".ui.meetings_list.MeetingsListActivity"
+            android:parentActivityName=".ui.meetings_list.MeetingListActivity"
             android:theme="@style/Theme.Maréu.NoActionBar" />
         <activity
-            android:name=".ui.meetings_list.MeetingsListActivity"
+            android:name=".ui.meetings_list.MeetingListActivity"
             android:theme="@style/Theme.Maréu.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

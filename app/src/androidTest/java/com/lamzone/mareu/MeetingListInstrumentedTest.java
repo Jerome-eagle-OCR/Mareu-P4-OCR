@@ -16,11 +16,36 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class MeetingListInstrumentedTest {
+
     @Test
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.lamzone.mareu", appContext.getPackageName());
+    }
+
+    @Test
+    public void meetingListShouldNotBeEmpty() {
+    }
+
+    @Test
+    public void meetingListDeleteActionShouldRemoveItem() {
+    }
+
+    @Test
+    public void filterByDateShouldFilterMeetingListBySelectedDate() {
+    }
+
+    @Test
+    public void filterByMeetingRoomShouldFilterMeetingListBySelectedMeetingRoom() {
+    }
+
+    @Test
+    public void reinitializeListActionShouldReinitializeMeetingListProperly() {
+    }
+
+    @Test
+    public void addNewMeetingShouldAddNewItemInMeetingList() {
     }
 }

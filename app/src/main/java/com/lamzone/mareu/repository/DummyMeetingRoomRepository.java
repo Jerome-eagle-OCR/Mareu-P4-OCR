@@ -5,6 +5,7 @@ import com.lamzone.mareu.model.MeetingRoom;
 import com.lamzone.mareu.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
      * @return the full list of meetings
      */
     public List<Meeting> getMeetings() {
+        Collections.sort(mMeetings, new Utils.SortByStartTime());
         return mMeetings;
     }
 
@@ -73,6 +75,7 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
                 meetings.add(mMeetings.get(i));
             }
         }
+        Collections.sort(meetings, new Utils.SortByStartTime());
         return meetings;
     }
 
@@ -125,14 +128,7 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
     @Override
     public void scheduleMeeting(long idMeetingRoom, String meetingSubject, long meetingStartTime, long meetingEndTime, List<String> meetingParticipants) {
         Meeting newMeeting = new Meeting(idMeetingRoom, meetingSubject, meetingStartTime, meetingEndTime, meetingParticipants);
-        boolean isNotAlreadyInList = true;
-        for (Meeting meeting : mMeetings) {
-            if (newMeeting.equals(meeting)) {
-                isNotAlreadyInList = false;
-                break;
-            }
-        }
-        if (isNotAlreadyInList) mMeetings.add(newMeeting);
+        mMeetings.add(newMeeting);
     }
 
     /**
@@ -182,6 +178,7 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
                 meetings.add(mMeetings.get(i));
             }
         }
+        Collections.sort(meetings, new Utils.SortByStartTime());
         return meetings;
     }
 }
