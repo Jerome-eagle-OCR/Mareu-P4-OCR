@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,296 +8,259 @@
     tools:context=".ui.meetings_list.NewMeetingActivity">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fadeScrollbars="true"
+        android:scrollbars="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-        <ImageView
-            android:id="@+id/lz_mareu"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/lamzone_mareu"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/lz_mareu"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:src="@drawable/lamzone_mareu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:background="@color/white"
-            android:gravity="center"
-            android:shadowColor="@color/lamzoneDarker"
-            android:shadowDx="3"
-            android:shadowDy="3"
-            android:shadowRadius="2"
-            android:text="PLANIFIER UNE REUNION"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/lamzoneDark"
-            app:layout_constraintBottom_toBottomOf="@+id/lz_mareu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.5" />
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="105dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.464">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:shadowColor="@color/lamzoneDarker"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="2"
+                android:text="PLANIFIER UNE REUNION"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/lamzoneDark"
+                app:layout_constraintBottom_toBottomOf="@+id/lz_mareu"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meeting_subject_lyt"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
-                app:boxCornerRadiusBottomEnd="2dp"
-                app:boxCornerRadiusBottomStart="2dp"
-                app:boxCornerRadiusTopEnd="2dp"
-                app:boxCornerRadiusTopStart="2dp">
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="200dp"
+                android:layout_marginEnd="18dp"
+                app:boxCornerRadiusBottomEnd="3dp"
+                app:boxCornerRadiusBottomStart="3dp"
+                app:boxCornerRadiusTopEnd="3dp"
+                app:boxCornerRadiusTopStart="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/meeting_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_subject_24"
+                    android:hint="Sujet"
+                    android:inputType="textWebEditText"
+                    android:maxEms="55" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meeting_date_lyt"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="90dp"
+                app:boxCornerRadiusBottomEnd="3dp"
+                app:boxCornerRadiusBottomStart="3dp"
+                app:boxCornerRadiusTopEnd="3dp"
+                app:boxCornerRadiusTopStart="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.47">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/meeting_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_calendar_24"
                     android:focusable="false"
                     android:hint="Date" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="13dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_calendar_24" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="105dp"
-            android:layout_marginEnd="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.464">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meeting_time_lyt"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                app:boxCornerRadiusBottomEnd="2dp"
-                app:boxCornerRadiusBottomStart="2dp"
-                app:boxCornerRadiusTopEnd="2dp"
-                app:boxCornerRadiusTopStart="2dp">
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="90dp"
+                android:layout_marginEnd="18dp"
+                app:boxCornerRadiusBottomEnd="3dp"
+                app:boxCornerRadiusBottomStart="3dp"
+                app:boxCornerRadiusTopEnd="3dp"
+                app:boxCornerRadiusTopStart="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.47">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/meeting_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_time_24"
                     android:focusable="false"
                     android:hint="Heure" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="13dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_time_24" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="175dp"
-            android:layout_marginEnd="18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.464">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meeting_duration_lyt"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:boxCornerRadiusBottomEnd="2dp"
-                app:boxCornerRadiusBottomStart="2dp"
-                app:boxCornerRadiusTopEnd="2dp"
-                app:boxCornerRadiusTopStart="2dp">
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="145dp"
+                android:layout_marginEnd="18dp"
+                app:boxCornerRadiusBottomEnd="3dp"
+                app:boxCornerRadiusBottomStart="3dp"
+                app:boxCornerRadiusTopEnd="3dp"
+                app:boxCornerRadiusTopStart="3dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.47">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/meeting_duration"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_hourglass_top_24"
                     android:focusable="false"
                     android:hint="Durée"
                     android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="13dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_hourglass_top_24" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/meeting_duration_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="5dp"
-                android:autofillHints="Durée"
+                android:layout_width="0dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="12dp"
                 android:background="@null"
-                android:paddingStart="7sp"
-                android:spinnerMode="dropdown" />
+                android:paddingStart="5sp"
+                android:paddingEnd="5sp"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="@id/meeting_duration_lyt"
+                app:layout_constraintEnd_toEndOf="@id/meeting_duration_lyt"
+                app:layout_constraintStart_toStartOf="@id/meeting_duration_lyt"
+                app:layout_constraintTop_toTopOf="@id/meeting_duration_lyt" />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="175dp"
-            android:layout_marginEnd="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.464">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meeting_room_lyt"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                app:boxCornerRadiusBottomEnd="2dp"
-                app:boxCornerRadiusBottomStart="2dp"
-                app:boxCornerRadiusTopEnd="2dp"
-                app:boxCornerRadiusTopStart="2dp">
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="145dp"
+                android:layout_marginEnd="18dp"
+                app:boxCornerRadiusBottomEnd="3dp"
+                app:boxCornerRadiusBottomStart="3dp"
+                app:boxCornerRadiusTopEnd="3dp"
+                app:boxCornerRadiusTopStart="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.47">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/meeting_room"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:drawableEnd="@drawable/ic_location_searching_24"
                     android:focusable="false"
                     android:hint="Salle" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="13dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_image_search_24" />
 
-        </RelativeLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="245dp"
-            android:layout_marginEnd="18dp"
-            android:clickable="false"
-            app:boxCornerRadiusBottomEnd="2dp"
-            app:boxCornerRadiusBottomStart="2dp"
-            app:boxCornerRadiusTopEnd="2dp"
-            app:boxCornerRadiusTopStart="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/meeting_participants"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meeting_participants_lyt"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="Participants" />
+                android:layout_height="50dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="255dp"
+                android:layout_marginEnd="18dp"
+                android:clickable="false"
+                app:boxCornerRadiusBottomEnd="3dp"
+                app:boxCornerRadiusBottomStart="3dp"
+                app:boxCornerRadiusTopEnd="3dp"
+                app:boxCornerRadiusTopStart="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/meeting_participants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_person_add_24"
+                    android:focusable="true"
+                    android:hint="Ajout de participants"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <ImageView
-            style="@style/Widget.MaterialComponents.TimePicker.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="262dp"
-            android:layout_marginEnd="22dp"
-            android:background="@color/white"
-            android:src="@drawable/ic_person_add_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <HorizontalScrollView
-            android:id="@+id/chip_group_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="260dp"
-            android:layout_marginEnd="70dp"
-            android:paddingStart="11dp"
-            android:scrollbars="none"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group"
                 style="@style/Widget.MaterialComponents.Chip.Entry"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16sp"
+                android:layout_marginEnd="16sp"
                 android:clickable="true"
-                app:singleLine="true"
-                android:focusable="true" />
-        </HorizontalScrollView>
+                android:focusable="true"
+                app:layout_constraintEnd_toEndOf="@id/meeting_participants_lyt"
+                app:layout_constraintStart_toStartOf="@id/meeting_participants_lyt"
+                app:layout_constraintTop_toBottomOf="@id/meeting_participants_lyt" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/schedule_meeting"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="333dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="10dp"
-            android:enabled="false"
-            android:text="Planifier"
-            android:textColor="@color/white"
-            app:cornerRadius="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
-</ScrollView>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/schedule_meeting"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="333dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="10dp"
+        android:enabled="false"
+        android:text="Planifier"
+        android:textColor="@color/white"
+        app:cornerRadius="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

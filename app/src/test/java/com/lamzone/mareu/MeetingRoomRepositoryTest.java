@@ -26,7 +26,7 @@ public class MeetingRoomRepositoryTest {
     private static final long TEST_MEETING_ROOM3 = TEST_FREE_MEETING_ROOM.getId();
     private static final String TEST_MEETING_SUBJECT = "Test";
     private static final long TEST_MEETING_START_TIME = System.currentTimeMillis();
-    private static final long TEST_MEETING_DATE = TEST_MEETING_START_TIME + 1440 * 60000; //+24h
+    private static final long TEST_MEETING_DATE = TEST_MEETING_START_TIME + 2880 * 60000; //+48h
     private static final long TEST_MEETING_END_TIME = TEST_MEETING_START_TIME + 30 * 60000;//+30mn
     private static final List<String> TEST_MEETING_PARTICIPANTS = Arrays.asList("testParticipant1@lamzone.test", "testParticipant2@lamzone.test", "testParticipant3@lamzone.test");
 
