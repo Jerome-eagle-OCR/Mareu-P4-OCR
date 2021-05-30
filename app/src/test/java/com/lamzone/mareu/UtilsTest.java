@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
 
-    Calendar calendar = Calendar.getInstance();
+    final Calendar calendar = Calendar.getInstance();
 
     @Test
     public void formatDateWithSuccess() {

@@ -12,8 +12,8 @@ import java.util.List;
 
 public class MeetingRoomsGridAdapter extends BaseAdapter {
 
-    private List<MeetingRoom> mMeetingRooms;
-    private Context mContext;
+    private final List<MeetingRoom> mMeetingRooms;
+    private final Context mContext;
 
     public MeetingRoomsGridAdapter(List<MeetingRoom> meetingRooms, Context context) {
         mMeetingRooms = meetingRooms;

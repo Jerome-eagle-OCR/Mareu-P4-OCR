@@ -37,27 +37,27 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
     private FloatingActionButton mNewMeetingButton;
 
     private MeetingRoomRepository repository;
-    private List<Meeting> meetingList = new ArrayList<>();
+    private List<Meeting> mMeetingList = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meetings_list);
-
         if (savedInstanceState != null) repository = DI.getNewMeetingRoomRepository();
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         repository = DI.getMeetingRoomRepository();
-        repository.getMeetings().addAll(Utils.DUMMY_MEETINGS);
-        meetingList = repository.getMeetings();
+        if (repository.getMeetings().isEmpty())
+            repository.getMeetings().addAll(Utils.DUMMY_MEETINGS);
+        mMeetingList = repository.getMeetings();
 
         mRecyclerView = findViewById(R.id.meeting_list);
-        //mRecyclerView.hasFixedSize();
+        mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new MeetingRecyclerViewAdapter(meetingList);
+        mAdapter = new MeetingRecyclerViewAdapter(mMeetingList);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -94,14 +94,12 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
                 dialog.show();
                 meetingRoomsGrid.setOnItemClickListener((parent, view, position, id) -> {
                     long selectedMeetingRoomId = meetingRoomsGridAdapter.getItem(position).getId();
-                    mAdapter.refreshList(repository.getMeetingsForGivenMeetingRoom(selectedMeetingRoomId));
-                    mAdapter.setIsFilteredList(true);
+                    mAdapter.refreshList(Utils.FilterType.BY_MEETING_ROOM, selectedMeetingRoomId);
                     dialog.dismiss();
                 });
                 break;
             case 3:
-                mAdapter.refreshList(repository.getMeetings());
-                mAdapter.setIsFilteredList(false);
+                mAdapter.refreshList(Utils.FilterType.NONE, 0);
                 break;
             default:
         }
@@ -114,7 +112,12 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        mAdapter.refreshList(repository.getMeetingsForGivenDate(calendar.getTimeInMillis()));
-        mAdapter.setIsFilteredList(true);
+        mAdapter.refreshList(Utils.FilterType.BY_DATE, calendar.getTimeInMillis());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAdapter.refreshList(); //refresh recyclerViewAdapter list taking into account previous filtering
     }
 }

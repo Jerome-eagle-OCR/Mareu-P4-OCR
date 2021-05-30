@@ -1,5 +1,7 @@
 package com.lamzone.mareu.utils;
 
+import android.annotation.SuppressLint;
+
 import com.lamzone.mareu.di.DI;
 import com.lamzone.mareu.model.Meeting;
 import com.lamzone.mareu.model.MeetingRoom;
@@ -16,13 +18,13 @@ import java.util.List;
 public abstract class Utils {
 
 
-    public static MeetingRoomRepository mMeetingRoomRepository = DI.getTestMeetingRoomRepository();
+    public static final MeetingRoomRepository mMeetingRoomRepository = DI.getMeetingRoomRepository();
 
     public static final MeetingRoom DUMMY_FREE_MEETING_ROOM = mMeetingRoomRepository.getMeetingRooms().get(2);
     public static final long DUMMY_MEETING_ROOM1 = mMeetingRoomRepository.getMeetingRooms().get(0).getId();
     public static final long DUMMY_MEETING_ROOM2 = mMeetingRoomRepository.getMeetingRooms().get(1).getId();
     public static final long DUMMY_MEETING_ROOM3 = DUMMY_FREE_MEETING_ROOM.getId();
-    public static final String DUMMY_MEETING_SUBJECT = "Relecture de code application Maréu";
+    public static final String DUMMY_MEETING_SUBJECT = "Relecture de code de l'app Maréu pour soutenance";
     public static final long DUMMY_MEETING_START_TIME = System.currentTimeMillis();
     public static final long DUMMY_MEETING_END_TIME = DUMMY_MEETING_START_TIME + (30 * 60000);
     public static final List<String> DUMMY_MEETING_PARTICIPANTS = Arrays.asList("dummyParticipant1@lamzone.com", "dummyParticipant2@lamzone.com", "dummyParticipant3@lamzone.com");
@@ -53,6 +55,7 @@ public abstract class Utils {
      * @param dateFormat
      * @return formatted date as a String
      */
+    @SuppressLint("SimpleDateFormat")
     public static String formatDate(Calendar calendar, String dateFormat) {
         formatter = new SimpleDateFormat(dateFormat);
         String formattedDate = formatter.format(calendar.getTime());
@@ -66,6 +69,7 @@ public abstract class Utils {
      * @param timeMillis
      * @return formatted date as a String
      */
+    @SuppressLint("SimpleDateFormat")
     public static String formatDate(long timeMillis) {
         dateFormatSymbols.setShortWeekdays(new String[]{"Unused", "DIM", "LUN", "MAR", "MER", "JEU", "VEN", "SAM"});
         dateFormatSymbols.setShortMonths(new String[]{"JAN", "FEV", "MAR", "AVR", "MAI", "JUIN", "JUIL", "AOU", "SEP", "OCT", "NOV", "DEC"});
@@ -77,7 +81,14 @@ public abstract class Utils {
     public static class SortByStartTime implements Comparator<Meeting> {
         @Override
         public int compare(Meeting a, Meeting b) {
-            return (int) (a.getMeetingStartTime() - b.getMeetingStartTime());
+            long subtraction = (a.getMeetingStartTime() - b.getMeetingStartTime());
+            if (subtraction == 0) return (int) subtraction;
+            subtraction = subtraction > 0 ? 1 : -1;
+            return (int) subtraction;
         }
+    }
+
+    public enum FilterType {
+        NONE, BY_DATE, BY_MEETING_ROOM
     }
 }

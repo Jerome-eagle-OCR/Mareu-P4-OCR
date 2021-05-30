@@ -24,8 +24,10 @@ import java.util.List;
 public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecyclerViewAdapter.MeetingViewHolder> {
 
     private List<Meeting> mMeetings;
-    private MeetingRoomRepository repository = DI.getMeetingRoomRepository();
-    private boolean mIsFilteredList;
+    private final MeetingRoomRepository repository = DI.getMeetingRoomRepository();
+    private Utils.FilterType mFilterType = Utils.FilterType.NONE;
+    private long mFilterValue;
+
 
     public MeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetings = items;
@@ -71,15 +73,11 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
         holder.mMeetingParticipants.setText(currentMeeting.getMeetingParticipants().toString().replaceAll("\\[|\\]", ""));
         holder.mMeetingDate.setText(Utils.formatDate(currentMeeting.getMeetingStartTime()));
 
-        holder.mMeetingDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                repository.cancelMeeting(currentMeeting);
-                notifyItemRemoved(holder.getAbsoluteAdapterPosition());
-                if (mIsFilteredList) {
-                    mMeetings.remove(currentMeeting);
-                    notifyDataSetChanged();
-                }
+        holder.mMeetingDelete.setOnClickListener(v -> {
+            repository.cancelMeeting(currentMeeting);
+            notifyItemRemoved(holder.getAbsoluteAdapterPosition());
+            if (!mFilterType.equals(Utils.FilterType.NONE)) {
+                mMeetings.remove(currentMeeting);
             }
         });
     }
@@ -89,12 +87,24 @@ public class MeetingRecyclerViewAdapter extends RecyclerView.Adapter<MeetingRecy
         return mMeetings.size();
     }
 
-    public void refreshList(List<Meeting> meetings) {
-        mMeetings = meetings;
+    public void refreshList(Utils.FilterType filterType, long filterValue) {
+        mFilterType = filterType;
+        mFilterValue = filterValue;
+        switch (filterType) {
+            case NONE:
+                mMeetings = repository.getMeetings();
+                break;
+            case BY_DATE:
+                mMeetings = repository.getMeetingsForGivenDate(filterValue);
+                break;
+            case BY_MEETING_ROOM:
+                mMeetings = repository.getMeetingsForGivenMeetingRoom(filterValue);
+                break;
+        }
         notifyDataSetChanged();
     }
 
-    public void setIsFilteredList(boolean isFilteredList) {
-        mIsFilteredList = isFilteredList;
+    public void refreshList() {
+        this.refreshList(mFilterType, mFilterValue);
     }
 }

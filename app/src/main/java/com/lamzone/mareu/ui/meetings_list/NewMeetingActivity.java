@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,7 +52,8 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     private long mMeetingEndTimeMillis;
     private long mMeetingDurationMillis;
     private MeetingRoom clickedMeetingRoom;
-    private List<String> mMeetingParticipantsList;
+    private List<String> mMeetingParticipantList;
+    private int chipId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
 
         repository = DI.getMeetingRoomRepository();
         calendar = Calendar.getInstance();
-        mMeetingParticipantsList = new ArrayList<>();
+        mMeetingParticipantList = new ArrayList<>();
 
         //Bind widgets
         mMeetingSubjectLyt = findViewById(R.id.meeting_subject_lyt);
@@ -111,31 +111,29 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         });
 
         mMeetingParticipants.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                String inputText = v.getText().toString();
-                if (inputText.contains("@") && !inputText.endsWith("@") && inputText.contains(".")) {
-                    mMeetingParticipantsList.add(inputText);
-                    int chipId = 0;
-                    Chip chip = new Chip(NewMeetingActivity.this);
-                    chip.setText(inputText);
-                    chip.setChipBackgroundColorResource(R.color.teal_200);
-                    chip.setCloseIconVisible(true);
-                    chip.setCloseIconTintResource(R.color.lamzoneDarker);
-                    chip.setTextColor(getResources().getColor(R.color.lamzoneDarker));
-                    chip.setId(chipId++);
-                    chip.setOnCloseIconClickListener(v1 -> {
-                        mChipGroup.removeView(v1);
-                        mMeetingParticipantsList.remove(chip.getText().toString());
-                        checkParticipants();
-                    });
-                    mChipGroup.addView(chip);
-                    mMeetingParticipants.setText(null);
-                }
-                checkParticipants();
+            String inputText = v.getText().toString();
+            if (!inputText.contains(" ") && inputText.contains("@") && !inputText.endsWith("@") && inputText.contains(".")) {
+                mMeetingParticipantList.add(inputText);
+                Chip chip = new Chip(NewMeetingActivity.this);
+                chip.setText(inputText);
+                chip.setChipBackgroundColorResource(R.color.teal_200);
+                chip.setCloseIconVisible(true);
+                chip.setCloseIconTintResource(R.color.lamzoneDarker);
+                chip.setTextColor(getResources().getColor(R.color.lamzoneDarker));
+                chip.setId(chipId++);
+                chip.setOnCloseIconClickListener(v1 -> {
+                    mChipGroup.removeView(v1);
+                    mMeetingParticipantList.remove(chip.getText().toString());
+                    couldEnableScheduleButton();
+                });
+                mChipGroup.addView(chip);
+                mMeetingParticipants.setText(null);
+            } else {
+                Snackbar.make(v, "Email non valide, pas de nouveau particpant ajouté.", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.lamzoneDark)).show();
             }
+            couldEnableScheduleButton();
             return false;
         });
-
     }
 
     /**
@@ -151,8 +149,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String selectedDate = Utils.formatDate(calendar, Utils.DATE_FORMAT_1);
-        if (!selectedDate.isEmpty()) mMeetingDate.setText(selectedDate);
+        mMeetingDate.setText(Utils.formatDate(calendar, Utils.DATE_FORMAT_1));
         mMeetingRoom.setText(null);
     }
 
@@ -167,8 +164,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
-        String selectedTime = Utils.formatDate(calendar, Utils.TIME_FORMAT);
-        if (!selectedTime.isEmpty()) mMeetingTime.setText(selectedTime);
+        mMeetingTime.setText(Utils.formatDate(calendar, Utils.TIME_FORMAT));
         mMeetingRoom.setText(null);
     }
 
@@ -182,9 +178,8 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String selectedDuration = parent.getItemAtPosition(position).toString();
-        mMeetingDuration.setText(selectedDuration);
-        mMeetingDurationMillis = (position + 1) * 15 * 60000;
+        mMeetingDuration.setText(parent.getItemAtPosition(position).toString());
+        mMeetingDurationMillis = (position) * 15 * 60000;
         mMeetingRoom.setText(null);
     }
 
@@ -219,21 +214,13 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     }
 
     /**
-     * Clear participants list if there are no chips and call couldEnableScheduleButton()
-     */
-    private void checkParticipants() {
-        if (mChipGroup.getChildCount() == 0) mMeetingParticipantsList.clear();
-        couldEnableScheduleButton();
-    }
-
-    /**
      * Enable schedule button if all is good (no empty field)
      */
     private void couldEnableScheduleButton() {
         mScheduleMeetingButton.setEnabled(!mMeetingSubject.getText().toString().equals("")
                 && !mMeetingDate.getText().toString().equals("") && !mMeetingTime.getText().toString().equals("")
                 && !mMeetingDuration.getText().toString().equals("") && !mMeetingRoom.getText().toString().equals("")
-                && !mMeetingParticipantsList.isEmpty());
+                && !mMeetingParticipantList.isEmpty());
     }
 
     /**
@@ -259,38 +246,17 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             case R.id.meeting_room:
                 if (mMeetingDate.getText().toString().equals("") || mMeetingTime.getText().toString().equals("")
                         || mMeetingDuration.getText().toString().equals("")) {
-                    Snackbar.make(v, "Veuillez d'abord saisir date, heure et durée.", Snackbar.LENGTH_SHORT).setBackgroundTint(getResources().getColor(R.color.lamzoneDark)).show();
+                    Snackbar.make(v, "Veuillez d'abord saisir une date, une heure, une durée.", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.lamzoneDark)).show();
                 } else {
                     showDialogMeetingRoomsGrid(v);
                 }
                 break;
             case R.id.schedule_meeting:
                 repository.scheduleMeeting(clickedMeetingRoom.getId(), mMeetingSubject.getText().toString(),
-                        mMeetingStartTimeMillis, mMeetingEndTimeMillis, mMeetingParticipantsList);
+                        mMeetingStartTimeMillis, mMeetingEndTimeMillis, mMeetingParticipantList);
                 finish();
                 break;
             default:
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        resetAll();
-    }
-
-    /**
-     * Reset all widgets texts, visibility and so on to initial state
-     */
-    private void resetAll() {
-        mMeetingDate.setText(null);
-        mMeetingTime.setText(null);
-        mMeetingRoom.setText(null);
-        mMeetingDuration.setText(null);
-        mMeetingDurationSpinner.setVisibility(View.GONE);
-        mMeetingSubject.setText(null);
-        mMeetingParticipants.setText(null);
-        mMeetingParticipantsList.clear();
-        mChipGroup.removeAllViews();
     }
 }
