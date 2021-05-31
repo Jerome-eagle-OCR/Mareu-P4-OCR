@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -107,6 +108,24 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             @Override
             public void afterTextChanged(Editable s) {
                 couldEnableScheduleButton();
+            }
+        });
+
+        mMeetingParticipants.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if ((s.toString().contains(" ")) || (s.toString().contains(";"))) {
+                    mMeetingParticipants.setText(s.toString().substring(0, s.length() - 1));
+                    mMeetingParticipants.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
 
