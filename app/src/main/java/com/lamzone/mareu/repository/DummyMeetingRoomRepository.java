@@ -97,12 +97,8 @@ public class DummyMeetingRoomRepository implements MeetingRoomRepository {
                 boolean loop = true;
                 int j = 0;
                 while (loop && j < meetingsInCurrentMeetingRoom.size()) {
-                    if (newMeetingStartTime >= meetingsInCurrentMeetingRoom.get(j).getMeetingEndTime()) {
-                        if (j == meetingsInCurrentMeetingRoom.size() - 1) {
-                            freeMeetingRoomsAtGivenSlot.add(meetingRooms.get(i));
-                        }
-                        j++;
-                    } else if (newMeetingEndTime <= meetingsInCurrentMeetingRoom.get(j).getMeetingStartTime()) {
+                    if (newMeetingStartTime >= meetingsInCurrentMeetingRoom.get(j).getMeetingEndTime()
+                            || newMeetingEndTime <= meetingsInCurrentMeetingRoom.get(j).getMeetingStartTime()) {
                         if (j == meetingsInCurrentMeetingRoom.size() - 1) {
                             freeMeetingRoomsAtGivenSlot.add(meetingRooms.get(i));
                         }

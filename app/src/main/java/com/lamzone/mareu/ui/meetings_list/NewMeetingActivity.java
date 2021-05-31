@@ -81,7 +81,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     }
 
     /**
-     * Set all listeners including TextChangedListeners
+     * Set all listeners including TextChangedListeners and EditorActionListeners
      */
     private void init() {
         mMeetingDate.setOnClickListener(this);
@@ -198,7 +198,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mMeetingDuration.setText(parent.getItemAtPosition(position).toString());
-        mMeetingDurationMillis = (position) * 15 * 60000;
+        mMeetingDurationMillis = (position) * 15 * 60000; //each item is +15mn from previous one
         mMeetingRoom.setText(null);
     }
 
@@ -207,7 +207,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     }
 
     /**
-     * Set meeting start and end time and display a grid with only available rooms and finally set the picked one (and text)
+     * Set meeting start and end times and display a grid with only available rooms and finally set the picked one (and text)
      * Call couldEnableScheduleButton() to allow meeting scheduling in case other fields are all set
      *
      * @param v

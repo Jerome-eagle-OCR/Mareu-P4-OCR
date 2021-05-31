@@ -78,6 +78,12 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
         return true;
     }
 
+    /**
+     * Run filtering according to menu choice : by date (date picker), by room (grid of symbols), none
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getOrder()) {
@@ -106,6 +112,14 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Set date according to picker selection and filter list by this date
+     *
+     * @param view
+     * @param year
+     * @param month
+     * @param dayOfMonth
+     */
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
