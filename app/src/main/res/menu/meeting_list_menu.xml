@@ -6,20 +6,20 @@
         android:icon="@drawable/ic_filter_alt_24"
         android:orderInCategory="0"
         app:showAsAction="ifRoom"
-        android:title="menu">
+        android:title="@string/menu">
 
         <menu>
             <item
                 android:orderInCategory="1"
-                android:title="Filtrer par date"
+                android:title="@string/byDate"
                 app:showAsAction="never" />
             <item
                 android:orderInCategory="2"
-                android:title="Filtrer par salle"
+                android:title="@string/byMeetingRoom"
                 app:showAsAction="never" />
             <item
                 android:orderInCategory="3"
-                android:title="Réinitialiser la liste"
+                android:title="@string/resetList"
                 app:showAsAction="never" />
         </menu>
 

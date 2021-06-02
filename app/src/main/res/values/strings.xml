@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Maréu</string>
+    <string name="byDate">Filtrer par date</string>
+    <string name="byMeetingRoom">Filtrer par salle</string>
+    <string name="resetList">Réinitialiser la liste</string>
+    <string name="menu">menu</string>
 </resources>

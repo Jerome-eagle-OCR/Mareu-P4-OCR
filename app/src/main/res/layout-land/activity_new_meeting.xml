@@ -242,6 +242,7 @@
                 android:layout_marginEnd="16sp"
                 android:clickable="true"
                 android:focusable="true"
+                app:flow_horizontalAlign="start"
                 app:layout_constraintEnd_toEndOf="@id/meeting_participants_lyt"
                 app:layout_constraintStart_toStartOf="@id/meeting_participants_lyt"
                 app:layout_constraintTop_toBottomOf="@id/meeting_participants_lyt" />
@@ -255,7 +256,6 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="333dp"
         android:layout_marginBottom="5dp"
         android:elevation="10dp"
         android:enabled="false"

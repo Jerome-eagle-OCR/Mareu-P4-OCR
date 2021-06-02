@@ -37,13 +37,18 @@ dependencies {
     implementation 'org.jetbrains:annotations:21.0.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    // EVENT BUS
-    //implementation 'org.greenrobot:eventbus:3.1.1'
+    // BUTTERKNIFE
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
     // UNIT TESTS
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
 
     // UI TESTS
+    // INSTRUMENTATION TEST
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
 }

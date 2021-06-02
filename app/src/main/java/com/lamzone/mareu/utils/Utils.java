@@ -82,6 +82,7 @@ public abstract class Utils {
         @Override
         public int compare(Meeting a, Meeting b) {
             long subtraction = (a.getMeetingStartTime() - b.getMeetingStartTime());
+            if (subtraction == 0) subtraction = a.getMeetingEndTime() - b.getMeetingEndTime();
             if (subtraction == 0) return (int) subtraction;
             subtraction = subtraction > 0 ? 1 : -1;
             return (int) subtraction;

@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -22,19 +23,27 @@ import com.lamzone.mareu.di.DI;
 import com.lamzone.mareu.model.Meeting;
 import com.lamzone.mareu.repository.MeetingRoomRepository;
 import com.lamzone.mareu.utils.Utils;
+import com.lamzone.mareu.utils.UtilsForTesting;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MeetingListActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.meeting_list)
+    RecyclerView mRecyclerView;
     private MeetingRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private Toolbar mToolbar;
-    private FloatingActionButton mNewMeetingButton;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.create_meeting)
+    FloatingActionButton mCreateMeetingBtn;
 
     private MeetingRoomRepository repository;
     private List<Meeting> mMeetingList = new ArrayList<>();
@@ -44,34 +53,50 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meetings_list);
+        ButterKnife.bind(this);
         if (savedInstanceState != null) repository = DI.getNewMeetingRoomRepository();
-
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
         repository = DI.getMeetingRoomRepository();
+        setSupportActionBar(mToolbar);
+        setMeetingList();
+        setNewMeetingButton();
+    }
+
+    /**
+     * Get dummy meetings and set recyclerView
+     */
+    private void setMeetingList() {
         if (repository.getMeetings().isEmpty())
             repository.getMeetings().addAll(Utils.DUMMY_MEETINGS);
         mMeetingList = repository.getMeetings();
 
-        mRecyclerView = findViewById(R.id.meeting_list);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new MeetingRecyclerViewAdapter(mMeetingList);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
 
-        mNewMeetingButton = findViewById(R.id.create_meeting);
-        mNewMeetingButton.setOnClickListener(v -> {
+    /**
+     * Set onClick and onLongClick listeners for new meeting button
+     */
+    private void setNewMeetingButton() {
+        mCreateMeetingBtn.setOnClickListener(v -> {
             Intent newMeetingActivityIntent = new Intent(MeetingListActivity.this, NewMeetingActivity.class);
             startActivity(newMeetingActivityIntent);
         });
-        mNewMeetingButton.setOnLongClickListener(v -> {
-            mNewMeetingButton.setAlpha(mNewMeetingButton.getAlpha() == 1 ? (float) 0.2 : (float) 1);
+        mCreateMeetingBtn.setOnLongClickListener(v -> {
+            mCreateMeetingBtn.setAlpha(mCreateMeetingBtn.getAlpha() == 1 ? (float) 0.2 : (float) 1);
             return true;
         });
+
     }
 
+    /**
+     * Create menu for list filtering
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.meeting_list_menu, menu);
@@ -79,7 +104,7 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
     }
 
     /**
-     * Run filtering according to menu choice : by date (date picker), by room (grid of symbols), none
+     * Perform filtering according to menu choice : by date (date picker), by room (grid of symbols), none
      *
      * @param item
      * @return
@@ -133,5 +158,23 @@ public class MeetingListActivity extends AppCompatActivity implements DatePicker
     protected void onResume() {
         super.onResume();
         mAdapter.refreshList(); //refresh recyclerViewAdapter list taking into account previous filtering
+    }
+
+    @VisibleForTesting
+    public void emptyMeetingList() {
+        repository.getMeetings().clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @VisibleForTesting
+    public void addAllTestMeetings() {
+        repository.getMeetings().addAll(UtilsForTesting.TEST_MEETINGS);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @VisibleForTesting
+    public void addAfterTomorrowTestMeeting() {
+        repository.getMeetings().add(UtilsForTesting.TEST_MEETING);
+        mAdapter.notifyDataSetChanged();
     }
 }
