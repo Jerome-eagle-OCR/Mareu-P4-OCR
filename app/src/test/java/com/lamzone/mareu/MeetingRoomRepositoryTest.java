@@ -86,8 +86,7 @@ public class MeetingRoomRepositoryTest {
         //Given : we need a free meeting room at a specific slot
         //When : we get a free meeting room at this time slot
         //Then : the returned meeting room is the expected free one
-        List<Meeting> shuffledList = new ArrayList<>();
-        shuffledList.addAll(TEST_MEETINGS);
+        List<Meeting> shuffledList = new ArrayList<>(TEST_MEETINGS);
         Collections.shuffle(shuffledList);//test method on a shuffled list to be sure we don't get the expected room (to list) by chance
         repository.getMeetings().addAll(shuffledList);
         assertEquals(Collections.singletonList(TEST_FREE_MEETING_ROOM), repository.getFreeMeetingRoomsAtGivenSlot(TEST_MEETING_START_TIME, TEST_MEETING_END_TIME));

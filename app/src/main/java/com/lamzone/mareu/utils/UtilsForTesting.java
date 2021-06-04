@@ -7,6 +7,7 @@ import com.lamzone.mareu.repository.DummyMeetingRoomGenerator;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class UtilsForTesting {
 
     public static final MeetingRoom TEST_FREE_MEETING_ROOM = DummyMeetingRoomGenerator.DUMMY_MEETING_ROOMS.get(2);
@@ -32,4 +33,15 @@ public class UtilsForTesting {
     public static final List<Meeting> TEST_MEETINGS = Arrays.asList(TEST_MEETING1, TEST_MEETING2, TEST_MEETING3, TEST_MEETING4, TEST_MEETING5, TEST_MEETING6, TEST_MEETING7, TEST_MEETING8);
 
     public static final Meeting TEST_MEETING = new Meeting(TEST_MEETING_ROOM3, TEST_MEETING_SUBJECT, TEST_MEETING_DATE, TEST_MEETING_DATE + 30 * 60000, TEST_MEETING_PARTICIPANTS);
+
+    public static final String SELECTED_MEETINGROOM_NAME = "Sun";
+    public static final int EXPECTED_COUNT_FOR_SELECTED_ROOM = 1;
+    public static final int SELECTED_ROOM_INDEX_IN_GRID = 0;
+    public static final int FIRST_POSITION_IN_LIST = 0;
+    public static final String NEW_MEETING_SUBJECT = "Le sujet du nouveau meeting";
+    public static final String NEW_MEETING_MEETINGROOM_NAME = "Earth";
+
+    public static final List<Integer> SUBJECT_SUFFIX_LIST = Arrays.asList(6, 2, 5, 1, 3, 4, 7, 8);
+
+    public static final String SELECTED_DURATION_IN_SPINNER = "45 minutes";
 }

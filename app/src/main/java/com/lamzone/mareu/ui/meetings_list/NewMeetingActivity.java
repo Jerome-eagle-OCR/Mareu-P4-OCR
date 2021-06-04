@@ -57,12 +57,13 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
     ChipGroup mChipGroup;
     @BindView(R.id.meeting_duration_spinner)
     Spinner mMeetingDurationSpinner;
-    @BindView(R.id.schedule_meeting)
+    @BindView(R.id.schedule_meeting_btn)
     Button mScheduleMeetingBtn;
 
     private MeetingRoomRepository repository;
     private Calendar calendar;
     private List<String> mMeetingParticipantList;
+
     private long mMeetingStartTimeMillis;
     private long mMeetingEndTimeMillis;
     private long mMeetingDurationMillis;
@@ -112,6 +113,10 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             }
         });
 
+        onMeetingParticipantSet();
+    }
+
+    private void onMeetingParticipantSet() {
         mMeetingParticipant.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -119,7 +124,7 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ((s.toString().contains(" ")) || (s.toString().contains(";")) && !s.toString().isEmpty()) {
+                if (s.toString().contains(" ") || s.toString().contains(";")) {
                     mMeetingParticipant.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 }
             }
@@ -147,11 +152,11 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
                     couldEnableScheduleButton();
                 });
                 mChipGroup.addView(chip);
-                mMeetingParticipant.setText("");
             } else {
                 Snackbar.make(v, "Email non valide, pas de nouveau participant ajouté.", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.lamzoneDark)).show();
             }
             couldEnableScheduleButton();
+            mMeetingParticipant.setText("");
             return false;
         });
     }
@@ -266,12 +271,13 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
             case R.id.meeting_room:
                 if (mMeetingDate.getText().toString().equals("") || mMeetingTime.getText().toString().equals("")
                         || mMeetingDuration.getText().toString().equals("")) {
-                    Snackbar.make(v, "Veuillez d'abord saisir une date, une heure, une durée.", Snackbar.LENGTH_LONG).setBackgroundTint(getResources().getColor(R.color.lamzoneDark)).show();
+                    Snackbar.make(v, getResources().getString(R.string.msg_room_disabled), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.lamzoneDark)).show();
                 } else {
                     showDialogMeetingRoomsGrid(v);
                 }
                 break;
-            case R.id.schedule_meeting:
+            case R.id.schedule_meeting_btn:
                 repository.scheduleMeeting(clickedMeetingRoom.getId(), mMeetingSubject.getText().toString(),
                         mMeetingStartTimeMillis, mMeetingEndTimeMillis, mMeetingParticipantList);
                 finish();

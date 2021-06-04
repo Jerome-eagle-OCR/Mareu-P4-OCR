@@ -25,7 +25,6 @@ import com.lamzone.mareu.repository.MeetingRoomRepository;
 import com.lamzone.mareu.utils.Utils;
 import com.lamzone.mareu.utils.UtilsForTesting;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

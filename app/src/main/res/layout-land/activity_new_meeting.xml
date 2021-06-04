@@ -15,7 +15,7 @@
         android:fadeScrollbars="false"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="left"
-        app:layout_constraintBottom_toTopOf="@id/schedule_meeting"
+        app:layout_constraintBottom_toTopOf="@id/schedule_meeting_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -252,7 +252,7 @@
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/schedule_meeting"
+        android:id="@+id/schedule_meeting_btn"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

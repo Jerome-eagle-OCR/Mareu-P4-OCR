@@ -4,4 +4,5 @@
     <string name="byMeetingRoom">Filtrer par salle</string>
     <string name="resetList">Réinitialiser la liste</string>
     <string name="menu">menu</string>
+    <string name="msg_room_disabled">Veuillez d\'abord saisir une date, une heure, une durée.</string>
 </resources>
