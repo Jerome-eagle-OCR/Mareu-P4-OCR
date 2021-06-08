@@ -2,7 +2,6 @@ package com.lamzone.mareu;
 
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -30,7 +29,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withParentIndex;
@@ -93,9 +91,8 @@ public class MeetingListInstrumentedTest {
         onView(allOf(withParent(withId(R.id.meeting_list)), withParentIndex(FIRST_POSITION_IN_LIST)))
                 .check(matches(hasDescendant(allOf(withId(R.id.meeting_subject), withText(TEST_MEETING1.getMeetingSubject()))))); //check the meeting we will delete is at the expected position
         onView(withId(R.id.meeting_list)).perform(RecyclerViewActions.actionOnItemAtPosition(FIRST_POSITION_IN_LIST, new DeleteViewAction()));
-        //Then : the meeting has disappeared
+        //Then : the list counts one meeting less
         onView(withId(R.id.meeting_list)).check(withItemCount(TEST_MEETINGS.size() - 1));
-        onView(allOf(withId(R.id.meeting_subject), withText(TEST_MEETING1.getMeetingSubject()), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist());
     }
 
     @Test
@@ -156,6 +153,27 @@ public class MeetingListInstrumentedTest {
         onView(withId(R.id.new_meeting_layout)).check(matches(isDisplayed())); //new meeting activity has been reached
         checkMeetingNotSchedulable(); //meeting cannot be scheduled yet
         checkMeetingRoomNotSettable(); //meeting room cannot be set yet
+        fillNewMeetingForm();
+        //When : we click on the schedule meeting button
+        onView(withId(R.id.schedule_meeting_btn)).perform(click());
+        //Then : the new meeting has been added and appears in the list
+        onView(withId(R.id.meeting_list)).check(withItemCount(TEST_MEETINGS.size() + 1));
+        onView(allOf(withParent(withId(R.id.meeting_list)), withParentIndex(4)))
+                .check(matches(hasDescendant(allOf(withId(R.id.meeting_subject), withText(NEW_MEETING_SUBJECT)))));
+    }
+
+    private void checkOnlyTodayMeetings() {
+        boolean noTodayMeetings = false;
+        try {
+            onView(withId(R.id.meeting_list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(Utils.formatDate(TEST_MEETING_DATE))))); //must throw PerformException
+
+        } catch (PerformException expected) {
+            noTodayMeetings = true;
+        }
+        assertTrue(noTodayMeetings);
+    }
+
+    private void fillNewMeetingForm() {
         ///set duration (will set spinner VISIBLE)
         onView(withId(R.id.meeting_duration)).perform(click());
         onView(withText(SELECTED_DURATION_IN_SPINNER)).check(matches(isDisplayed())); //check spinner actually visible
@@ -192,23 +210,6 @@ public class MeetingListInstrumentedTest {
             onView(allOf(withText(TEST_MEETING_PARTICIPANTS.get(i)), withClassName(is(Chip.class.getName())))).check(matches(isDisplayed())); //check chip added
             onView(withId(R.id.schedule_meeting_btn)).check(matches(isEnabled())); //scheduling must be now possible
         }
-        //When : we click on the schedule meeting button
-        onView(withId(R.id.schedule_meeting_btn)).perform(click());
-        //Then : the new meeting has been added and appears in the list
-        onView(withId(R.id.meeting_list)).check(withItemCount(TEST_MEETINGS.size() + 1));
-        onView(allOf(withParent(withId(R.id.meeting_list)), withParentIndex(4)))
-                .check(matches(hasDescendant(allOf(withId(R.id.meeting_subject), withText(NEW_MEETING_SUBJECT)))));
-    }
-
-    private void checkOnlyTodayMeetings() {
-        boolean noTodayMeetings = false;
-        try {
-            onView(withId(R.id.meeting_list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(Utils.formatDate(TEST_MEETING_DATE))))); //must throw PerformException
-
-        } catch (PerformException expected) {
-            noTodayMeetings = true;
-        }
-        assertTrue(noTodayMeetings);
     }
 
     private void checkMeetingNotSchedulable() {

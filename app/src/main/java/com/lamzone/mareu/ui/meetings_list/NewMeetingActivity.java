@@ -116,6 +116,9 @@ public class NewMeetingActivity extends AppCompatActivity implements DatePickerD
         onMeetingParticipantSet();
     }
 
+    /**
+     * Called by init() to set specific meeting participant input
+     */
     private void onMeetingParticipantSet() {
         mMeetingParticipant.addTextChangedListener(new TextWatcher() {
             @Override
